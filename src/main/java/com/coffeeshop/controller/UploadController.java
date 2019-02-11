@@ -13,13 +13,14 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import com.coffeeshop.domain.AttachFileDTO;
+import net.coobird.thumbnailator.Thumbnailator;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.FileCopyUtils;
@@ -28,10 +29,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-import org.zerock.domain.AttachFileDTO;
+
 
 import lombok.extern.log4j.Log4j;
-import net.coobird.thumbnailator.Thumbnailator;
+
 
 @Controller
 @Log4j
@@ -90,7 +91,6 @@ public class UploadController {
 		log.info("upload ajax");
 	}
 
-	@PreAuthorize("isAuthenticated()")
 	@PostMapping(value="/uploadAjaxAction", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<List<AttachFileDTO>> uploadAjaxPost(MultipartFile[] uploadFile) {
 		
@@ -227,8 +227,7 @@ public class UploadController {
 		return new ResponseEntity<Resource>(resource, headers, HttpStatus.OK);
 		
 	}
-	
-	@PreAuthorize("isAuthenticated()")
+
 	@PostMapping("/deleteFile")
 	@ResponseBody
 	public ResponseEntity<String> deleteFile(String fileName, String type){
