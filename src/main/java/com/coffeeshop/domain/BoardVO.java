@@ -3,6 +3,7 @@ package com.coffeeshop.domain;
 import lombok.Data;
 
 import java.util.Date;
+import java.util.List;
 
 @Data
 public class BoardVO {
@@ -12,4 +13,7 @@ public class BoardVO {
     private String writer;
     private Date regDate;
     private Date updateDate;
+    private int replyCnt;
+
+    private List<BoardAttachVO> attachList;
 }
