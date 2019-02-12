@@ -4,3 +4,4 @@ build
 out
 .idea/workspace.xml
 .idea/dataSources.local.xml
+.idea
