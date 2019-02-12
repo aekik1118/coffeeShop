@@ -4,7 +4,7 @@ import lombok.Data;
 
 import java.util.Date;
 import java.util.List;
-
+// bbb
 @Data
 public class MemberVO {
 
