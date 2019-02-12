@@ -8,7 +8,8 @@ CREATE TABLE tbl_board(
   content varchar2(2000) not null ,
   writer varchar2(50) not null ,
   regdate date default sysdate,
-  updatedate date default sysdate
+  updatedate date default sysdate,
+  replycnt number default 0
 );
 
 alter table tbl_board add constraint pk_board

@@ -2,5 +2,6 @@
 <project version="4">
   <component name="SqlDialectMappings">
     <file url="file://$PROJECT_DIR$/src/main/resources/sql/boardDDL.ddl" dialect="Oracle" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/sql/replyDDL.ddl" dialect="Oracle" />
   </component>
 </project>
