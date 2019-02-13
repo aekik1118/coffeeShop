@@ -60,7 +60,11 @@ public class BoardMapperTests {
         boardVO.setTitle("crudTest update Title");
         mapper.update(boardVO);
 
-        assertNotEquals(readBoardVO, mapper.read(boardVO.getBno()));
+        readBoardVO = mapper.read(boardVO.getBno());
+
+        assertEquals(boardVO.getTitle(),readBoardVO.getTitle());
+        assertEquals(boardVO.getContent(),readBoardVO.getContent());
+        assertEquals(boardVO.getWriter(),readBoardVO.getWriter());
 
         mapper.delete(boardVO.getBno());
 
