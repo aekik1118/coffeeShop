@@ -31,23 +31,40 @@ public class BoardMapperTests {
     }
 
     @Test
+    public void getListWithPagingTests(){
+        mapper.getListWithPaging(new Criteria()).forEach(boardVO -> log.info(boardVO));
+    }
+
+    @Test
     public void crudTest(){
+
+        BoardVO boardVO = new BoardVO();
+        boardVO.setTitle("crudTest Title");
+        boardVO.setContent("crudTest Content");
+        boardVO.setWriter("crudTest Writer");
+
+        mapper.insertSelectKey(boardVO);
+
         int count = mapper.getTotalCount(new Criteria());
 
         log.info(count);
 
-        BoardVO boardVO = mapper.read(1L);
+        BoardVO readBoardVO = mapper.read(boardVO.getBno());
 
-        log.info(boardVO);
+        log.info(readBoardVO);
 
-        mapper.delete(1L);
+        assertEquals(boardVO.getTitle(),readBoardVO.getTitle());
+        assertEquals(boardVO.getContent(),readBoardVO.getContent());
+        assertEquals(boardVO.getWriter(),readBoardVO.getWriter());
+
+        boardVO.setTitle("crudTest update Title");
+        mapper.update(boardVO);
+
+        assertNotEquals(readBoardVO, mapper.read(boardVO.getBno()));
+
+        mapper.delete(boardVO.getBno());
 
         assertEquals(count-1,mapper.getTotalCount(new Criteria()));
-
-        mapper.insert(boardVO);
-
-        assertEquals(count,mapper.getTotalCount(new Criteria()));
-
 
     }
 
