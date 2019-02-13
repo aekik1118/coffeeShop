@@ -25,7 +25,7 @@ CREATE TABLE tbl_order (
     customer VARCHAR2(50) NOT NULL,
     product VARCHAR2(100) NOT NULL,
     amount NUMBER(10, 0) NOT NULL,
-    price NUMBER(10, 0) DEFAULT 0,
+    price NUMBER(10, 0) NOT NULL DEFAULT 0,
     manager VARCHAR2(100) NOT NULL,
     odate DATE DEFAULT sysdate,
     sold CHAR(1) DEFAULT 0
