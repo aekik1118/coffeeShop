@@ -19,7 +19,14 @@
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">DataTables Example</h6>
+            <div class="row no-gutters align-items-center">
+                <div class="col mr-2">
+                    <h6 class="m-0 font-weight-bold text-primary">DataTables Example</h6>
+                </div>
+                <div class="col-auto">
+                    <a class="btn btn-primary -align-right" href="/board/register">글작성</a>
+                </div>
+            </div>
         </div>
         <div class="card-body">
             <div class="table-responsive">
@@ -53,22 +60,22 @@
             </div>
         </div>
         <div class="card-footer">
-            <div class="-pull-right">
+            <div class="row">
                 <ul class="pagination">
                     <c:if test="${pageMaker.prev}">
                         <li class="btn paginate_button previous"><a class="text"
-                                href="${pageMaker.startPage -1 }">Previous</a></li>
+                                                                    href="${pageMaker.startPage -1 }">Previous</a></li>
                     </c:if>
 
                     <c:forEach var="num" begin="${pageMaker.startPage}"
                                end="${pageMaker.endPage}">
                         <li class="btn paginate_button ${pageMaker.cri.pageNum == num ? "active":"" }"><a class="text"
-                                href="${num}">${num}</a></li>
+                                                                                                          href="${num}">${num}</a></li>
                     </c:forEach>
 
                     <c:if test="${pageMaker.next}">
                         <li class="btn paginate_button next"><a class="text"
-                                href="${pageMaker.endPage +1 }">Next</a></li>
+                                                                href="${pageMaker.endPage +1 }">Next</a></li>
                     </c:if>
                 </ul>
             </div>
