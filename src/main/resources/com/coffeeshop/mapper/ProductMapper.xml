@@ -8,4 +8,27 @@
         VALUES (#{productId}, #{price}, #{ice_possible}, #{explain})
     </insert>
 
+    <delete id="remove">
+        DELETE  tbl_product WHERE productid = #{productId}
+    </delete>
+
+    <update id="modify">
+        UPDATE tbl_product set price = #{price}, ice_possible = #{ice_possible}, explain = #{explain} WHERE productid = #{productId}
+    </update>
+
+    <select id="getList" resultType="com.coffeeshop.domain.ProductVO">
+        <![CDATA[
+			SELECT *
+			FROM
+			(
+				SELECT /*+ INDEX(tbl_product idx_product) */
+					rownum rn, productid, price, ice_possible, explain
+				FROM
+					tbl_product
+				WHERE
+				    rownum <= #{pageNum} * #{amount}
+			)
+			WHERE rn > (#{pageNum} - 1) * #{amount}
+		]]>
+    </select>
 </mapper>

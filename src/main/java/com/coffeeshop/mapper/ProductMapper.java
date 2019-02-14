@@ -8,7 +8,7 @@ import java.util.List;
 public interface ProductMapper {
     public void register(ProductVO product);
     public int remove(String productid);
-    public int modify(String productid);
+    public int modify(ProductVO product);
     public List<ProductVO> getList(Criteria cri);
 
 }
