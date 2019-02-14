@@ -10,6 +10,6 @@ public interface OrderMapper {
     public int delete(int ono);
     public void insertAmount();
     public void insertPrice();
-    public List<OrderVO> watingList(String customer);
+    public List<OrderVO> watingList();
     public List<OrderVO> completeList();
 }
