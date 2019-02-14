@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.coffeeshop.mapper.OrderMapper">
+
+    <insert id="insert">
+    INSERT INTO tbl_order (ono, customer, manager)
+	values (seq_order.nextval, #{customer}, #{manager})
+	</insert>
+
+    <delete id="delete">
+        DELETE FROM tbl_order WHERE ono = #{ono}
+    </delete>
+
+    <insert id="insertAmount">
+        INSERT  INTO tbl_order (amount) values (#{aount})
+    </insert>
+    
+    <insert id="insertPrice">
+        INSERT INTO tbl_order (price) values (#{price})
+    </insert>
+
+    <select id="watingList" resultType="com.coffeeshop.domain.OrderVO">
+        SELECT * FROM tbl_order where customer = #{customer} and sold = 0
+    </select>
+
+    <select id="completeList" resultType="com.coffeeshop.domain.OrderVO">
+        SELECT * FROM tbl_order where sold = 1
+    </select>
+
+</mapper>
