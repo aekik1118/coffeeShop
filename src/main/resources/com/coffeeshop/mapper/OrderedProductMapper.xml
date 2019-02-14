@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.coffeeshop.mapper.OrderedProductMapper">
+
+    <insert id="insert">
+    INSERT INTO tbl_orderedProduct (opno, ono, product, price)
+	values (seq_orderedProduct.nextval, #{ono}, #{product}, #{price})
+	</insert>
+
+    <delete id="delete">
+        DELETE FROM tbl_orderedProduct WHERE opno = #{opno}
+    </delete>
+
+    <select id="select" resultType="com.coffeeshop.domain.OrderedProductVO">
+		SELECT * FROM tbl_orderedProduct WHERE ono = #{ono}
+	</select>
+</mapper>
