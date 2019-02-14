@@ -1,0 +1,14 @@
+package com.coffeeshop.mapper;
+
+import com.coffeeshop.domain.Criteria;
+import com.coffeeshop.domain.ProductVO;
+
+import java.util.List;
+
+public interface ProductMapper {
+    public void register(ProductVO product);
+    public int remove(String productid);
+    public int modify(String productid);
+    public List<ProductVO> getList(Criteria cri);
+
+}
