@@ -98,11 +98,11 @@ public class BoardController {
 	public String remove(@RequestParam("bno") Long bno, @ModelAttribute("cri") Criteria cri, RedirectAttributes rttr, String writer) {
 		log.info("remove: " + bno);
 		
-		List<BoardAttachVO> attachList = service.getAttachList(bno);
-		
+		//List<BoardAttachVO> attachList = service.getAttachList(bno);
+
 		if (service.remove(bno)) {
 			//delete Attach Files
-			deleteFiles(attachList);
+			//deleteFiles(attachList);
 			rttr.addFlashAttribute("result", "success");
 		}
 

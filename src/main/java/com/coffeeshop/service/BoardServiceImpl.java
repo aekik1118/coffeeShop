@@ -68,12 +68,12 @@ public class BoardServiceImpl implements BoardService {
 		return modifyResult;
 	}
 
-	@Transactional
+	//@Transactional
 	@Override
 	public boolean remove(Long bno) {
 		log.info("remove.........." + bno);
 		
-		attachMapper.deleteAll(bno);
+		//attachMapper.deleteAll(bno);
 		
 		return mapper.delete(bno)==1;
 	}
