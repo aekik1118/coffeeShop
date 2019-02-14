@@ -17,13 +17,13 @@
     <insert id="insertAmount">
         INSERT  INTO tbl_order (amount) values (#{aount})
     </insert>
-    
+
     <insert id="insertPrice">
         INSERT INTO tbl_order (price) values (#{price})
     </insert>
 
     <select id="watingList" resultType="com.coffeeshop.domain.OrderVO">
-        SELECT * FROM tbl_order where customer = #{customer} and sold = 0
+        SELECT * FROM tbl_order where sold = 0
     </select>
 
     <select id="completeList" resultType="com.coffeeshop.domain.OrderVO">
