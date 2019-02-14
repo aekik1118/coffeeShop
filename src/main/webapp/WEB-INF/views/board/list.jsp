@@ -23,9 +23,7 @@
                 <div class="col mr-2">
                     <h6 class="m-0 font-weight-bold text-primary">DataTables Example</h6>
                 </div>
-                <div class="col-auto">
-                    <a class="btn btn-primary -align-right" href="/board/register">글작성</a>
-                </div>
+
             </div>
         </div>
         <div class="card-body">
@@ -60,24 +58,66 @@
             </div>
         </div>
         <div class="card-footer">
+
             <div class="row">
-                <ul class="pagination">
-                    <c:if test="${pageMaker.prev}">
-                        <li class="btn paginate_button previous"><a class="text"
-                                                                    href="${pageMaker.startPage -1 }">Previous</a></li>
-                    </c:if>
 
-                    <c:forEach var="num" begin="${pageMaker.startPage}"
-                               end="${pageMaker.endPage}">
-                        <li class="btn paginate_button ${pageMaker.cri.pageNum == num ? "active":"" }"><a class="text"
-                                                                                                          href="${num}">${num}</a></li>
-                    </c:forEach>
+                    <form id="searchForm" action="/board/list" method="get">
 
-                    <c:if test="${pageMaker.next}">
-                        <li class="btn paginate_button next"><a class="text"
-                                                                href="${pageMaker.endPage +1 }">Next</a></li>
-                    </c:if>
-                </ul>
+                            <select name="type">
+                                <option value=""
+                                        <c:out value="${pageMaker.cri.type == null ? 'selected':'' }" />>--</option>
+                                <option value="T"
+                                        <c:out value="${pageMaker.cri.type == 'T' ? 'selected':'' }" />>제목</option>
+                                <option value="C"
+                                        <c:out value="${pageMaker.cri.type == 'C' ? 'selected':'' }" />>내용</option>
+                                <option value="W"
+                                        <c:out value="${pageMaker.cri.type == 'W' ? 'selected':'' }" />>작성자</option>
+                                <option value="TC"
+                                        <c:out value="${pageMaker.cri.type == 'TC' ? 'selected':'' }" />>제목
+                                    or 내용</option>
+                                <option value="TW"
+                                        <c:out value="${pageMaker.cri.type == 'TW' ? 'selected':'' }" />>제목
+                                    or 작성자</option>
+                                <option value="TWC"
+                                        <c:out value="${pageMaker.cri.type == 'TWC' ? 'selected':'' }" />>제목
+                                    or 내용 or 작성자</option>
+                            </select>
+
+                            <input type='text' name='keyword' class="bg-light border-0 small d-none d-sm-inline-block form-inline navbar-search" aria-label="Search" aria-describedby="basic-addon2"
+                                   value='<c:out value="${pageMaker.cri.keyword }" />' /> <input
+                                type='hidden' name='pageNum'
+                                value='<c:out value="${pageMaker.cri.pageNum }" />'> <input
+                                type='hidden' name='amount'
+                                value='<c:out value="${pageMaker.cri.amount }" />'>
+                            <button class="btn btn-primary" type="button">
+                                <i class="fas fa-search fa-sm"></i>
+                            </button>
+                    </form>
+            </div>
+
+            <div class="row no-gutters align-items-center">
+                <div class="col mr-2">
+                    <ul class="pagination">
+                        <c:if test="${pageMaker.prev}">
+                            <li class="btn paginate_button previous"><a class="text"
+                                                                        href="${pageMaker.startPage -1 }">Previous</a></li>
+                        </c:if>
+
+                        <c:forEach var="num" begin="${pageMaker.startPage}"
+                                   end="${pageMaker.endPage}">
+                            <li class="btn paginate_button ${pageMaker.cri.pageNum == num ? "active":"" }"><a class="text"
+                                                                                                              href="${num}">${num}</a></li>
+                        </c:forEach>
+
+                        <c:if test="${pageMaker.next}">
+                            <li class="btn paginate_button next"><a class="text"
+                                                                    href="${pageMaker.endPage +1 }">Next</a></li>
+                        </c:if>
+                    </ul>
+                </div>
+                <div class="col-auto">
+                    <a class="btn btn-primary -align-right" href="/board/register">글작성</a>
+                </div>
             </div>
         </div>
     </div>
@@ -159,6 +199,32 @@
                     .val($(this).attr("href"));
                 actionForm.submit();
             });
+
+        var searchForm = $("#searchForm");
+
+        $("#searchForm button").on(
+            "click",
+            function(e) {
+                if (!searchForm.find("option:selected")
+                    .val()) {
+                    alert("검색종류를 선택하세요");
+                    return false;
+                }
+
+                if (!searchForm.find(
+                    "input[name='keyword']").val()) {
+                    alert("키워드를 입력하세요");
+                    return false;
+                }
+
+                searchForm.find("input[name='pageNum']")
+                    .val("1");
+                e.preventDefault();
+
+                searchForm.submit();
+
+            })
+
 
 
     })
