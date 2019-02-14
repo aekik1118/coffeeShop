@@ -27,11 +27,11 @@
                 <input type="text" class="form-control" name="writer" value='<c:out value="${board.writer}" />' readonly="readonly" >
             </div>
 
-            <div class="row">
-                <div class="col-xl-1 col-md-6 mb-4">
+            <div class="row align-items-start">
+                <div class="col-lg-1 col-md-6 mb-4 h-100 py-2">
                     <button class="btn btn-primary btn-block" data-oper='modify'>수정</button>
                 </div>
-                <div class="col-xl-1 col-md-6 mb-4">
+                <div class="col-lg-1 col-md-6 mb-4 h-100 py-2">
                     <button class="btn btn-primary btn-block" data-oper='list'>글목록</button>
                 </div>
             </div>
