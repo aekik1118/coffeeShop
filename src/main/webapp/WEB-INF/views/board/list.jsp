@@ -52,6 +52,27 @@
                 </table>
             </div>
         </div>
+        <div class="card-footer">
+            <div class="-pull-right">
+                <ul class="pagination">
+                    <c:if test="${pageMaker.prev}">
+                        <li class="btn paginate_button previous"><a class="text"
+                                href="${pageMaker.startPage -1 }">Previous</a></li>
+                    </c:if>
+
+                    <c:forEach var="num" begin="${pageMaker.startPage}"
+                               end="${pageMaker.endPage}">
+                        <li class="btn paginate_button ${pageMaker.cri.pageNum == num ? "active":"" }"><a class="text"
+                                href="${num}">${num}</a></li>
+                    </c:forEach>
+
+                    <c:if test="${pageMaker.next}">
+                        <li class="btn paginate_button next"><a class="text"
+                                href="${pageMaker.endPage +1 }">Next</a></li>
+                    </c:if>
+                </ul>
+            </div>
+        </div>
     </div>
 
 </div>
@@ -118,6 +139,21 @@
             actionForm.attr("action","/board/get");
             actionForm.submit();
         })
+
+        $(".paginate_button a").on(
+            "click",
+            function(e) {
+
+                e.preventDefault();
+
+                console.log('click');
+
+                actionForm.find("input[name='pageNum']")
+                    .val($(this).attr("href"));
+                actionForm.submit();
+            });
+
+
     })
 
 </script>
