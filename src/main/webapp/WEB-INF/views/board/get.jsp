@@ -68,7 +68,7 @@
                     </div>
                 </div>
             </div>
-            <div class="chat">
+            <div class="replybody">
                 <div class='row'>
                     <div class='col mb-4'>
                         <div class='card border-left-primary shadow h-100 py-2'>
@@ -91,6 +91,8 @@
             </div>
 
         </div>
+
+        <div class="card-footer replyfooter"></div>
     </div>
 
 </div>
@@ -110,9 +112,9 @@
 <script src="/resources/js/reply.js"></script>
 
 <script>
-    console.log("aaaa");
     $(document).ready(function () {
 
+        /*board button*/
 
         var operForm = $("#operForm");
 
@@ -132,9 +134,10 @@
         /*reply*/
 
         var bnoValue = '<c:out value="${board.bno}" />'
-        var replyUL = $(".chat");
+        var replyUL = $(".replybody");
+        var replyFooter = $(".replyfooter");
 
-        showList(1);
+        showList(-1);
 
         function showList(page) {
             replyService.getList({
@@ -180,59 +183,71 @@
 
                         replyUL.html(str);
                         showReplyPage(replyCnt);
-
-                function showReplyPage(replyCnt) {
-
-                    var endNum = Math.ceil(pageNum / 10.0) * 10;
-                    var startNum = endNum - 9;
-
-                    var prev = startNum != 1;
-                    var next = false;
-
-                    if (endNum * 10 >= replyCnt) {
-                        endNum = Math.ceil(replyCnt / 10.0);
-                    }
-
-                    if (endNum * 10 < replyCnt) {
-                        next = true;
-                    }
-
-                    var str = "<ul class='pagination pull-right'>";
-
-                    if (prev) {
-                        str += "<li class='page-item'><a class='page-link' href='"
-                            + (startNum - 1)
-                            + "'>Previous</a></li>";
-                    }
-
-                    for (var i = startNum; i <= endNum; i++) {
-                        var active = pageNum == i ? "active" : "";
-
-                        str += "<li class='page-item " + active+" '><a class='page-link' href='" + i + "'>"
-                            + i + "</a></li>";
-                    }
-
-                    if (next) {
-                        str += "<li class='page-item'><a class='page-link' href='"
-                            + (endNum + 1) + "'>Next</a></li>";
-                    }
-
-                    str += "</ul></div>";
-
-                    console.log(str);
-                    replyPageFooter.html(str);
-                }
-
-
             });
 
         }
+
+        function showReplyPage(replyCnt) {
+
+            var endNum = Math.ceil(pageNum / 10.0) * 10;
+            var startNum = endNum - 9;
+
+            var prev = startNum != 1;
+            var next = false;
+
+            if (endNum * 10 >= replyCnt) {
+                endNum = Math.ceil(replyCnt / 10.0);
+            }
+
+            if (endNum * 10 < replyCnt) {
+                next = true;
+            }
+
+            var str = "<ul class='pagination -pull-right'>";
+
+            if (prev) {
+                str += "<li class='page-item'><a class='page-link' href='"
+                    + (startNum - 1)
+                    + "'>Previous</a></li>";
+            }
+
+            for (var i = startNum; i <= endNum; i++) {
+                var active = pageNum == i ? "active" : "";
+
+                str += "<li class='page-item " + active+" '><a class='page-link' href='" + i + "'>"
+                    + i + "</a></li>";
+            }
+
+            if (next) {
+                str += "<li class='page-item'><a class='page-link' href='"
+                    + (endNum + 1) + "'>Next</a></li>";
+            }
+
+            str += "</ul></div>";
+
+            console.log(str);
+            replyFooter.html(str);
+        }
+
+        replyFooter.on("click", "li a", function(e) {
+            e.preventDefault();
+            console.log("page click");
+
+            var targetPageNum = $(this).attr("href");
+
+            console.log("targetPageNum: " + targetPageNum);
+
+            pageNum = targetPageNum;
+
+            showList(pageNum);
+
+        });
 
         /*reply add*/
 
         var addReplyBtn = $("#addReplyBtn");
 
-        var InputReply = $("#inputReply")
+        var InputReply = $("#inputReply");
 
         addReplyBtn.on("click", function (e) {
 
@@ -250,7 +265,9 @@
                 //showList(1);
                 showList(-1);
             });
-        })
+        });
+
+
 
     })
 
