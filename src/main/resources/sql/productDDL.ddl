@@ -4,3 +4,6 @@ create table tbl_product (
     ice_possible char(1) default '0',
     explain varchar2(1000)
 );
+
+alter table tbl_product add hot char(1) default '0';
+alter table tbl_product rename COLUMN ice_possible to ice;

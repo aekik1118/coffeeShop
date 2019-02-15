@@ -20,53 +20,45 @@ public class ProductMapperTests {
 
     @Setter(onMethod_ = {@Autowired})
     private ProductMapper mapper;
-    /*
-    @Test
-    public void mapperTest() {
-        log.info(mapper);
-    }
 
     @Test
-    public void registerTest() {
+    public void allTests() {
+
+        log.info("===== mapper test =====");
+        log.info(mapper);
+
+        log.info("===== register test =====");
         ProductVO product = new ProductVO();
         product.setProductId("test case");
         product.setPrice(3000);
-        product.setIce_possible(true);
+        product.setIce(true);
+        product.setHot(false);
         product.setExplain("Americano explain");
 
         mapper.register(product);
         log.info(product);
-    }
 
-    @Test
-    public void modifyTest() {
-        ProductVO product = new ProductVO();
-        product.setProductId("test case");
+        log.info("===== modify test =====");
         product.setPrice(5000);
-        product.setIce_possible(false);
+        product.setIce(false);
+        product.setHot(true);
         product.setExplain("modify test");
 
         if(mapper.modify(product) == 1)  log.info("modify success ProductVO : " + product);
         else log.info("modify fail");
-    }
 
-
-    @Test
-    public void removeTest() {
-        String str = "test case";
-
-        if(mapper.remove(str) == 1) log.info(str + " remove success");
-        else log.info(str + " remove fail");
-    }
-    */
-    @Test
-    public void getListTest() {
+        log.info("===== getList test (1page) =====");
         Criteria cri = new Criteria();
-        cri.setPageNum(2);
+        cri.setPageNum(1);
         cri.setAmount(9);
 
         List<ProductVO> list = mapper.getList(cri);
-        list.forEach(product -> log.info(product.getProductId()));
+        list.forEach(vo -> log.info(vo.getProductId()));
+
+        log.info("===== remove test =====");
+        String str = "test case";
+        if(mapper.remove(str) == 1) log.info(str + " remove success");
+        else log.info(str + " remove fail");
     }
 
 }

@@ -7,6 +7,7 @@ public class ProductVO {
 
     private String productId;
     private int price;
-    private Boolean ice_possible;
+    private Boolean ice;
+    private Boolean hot;
     private String explain;
 }

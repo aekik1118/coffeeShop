@@ -4,8 +4,8 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.coffeeshop.mapper.ProductMapper">
     <insert id="register">
-        INSERT INTO tbl_product (productid, price, ice_possible, explain)
-        VALUES (#{productId}, #{price}, #{ice_possible}, #{explain})
+        INSERT INTO tbl_product (productid, price, ice, hot, explain)
+        VALUES (#{productId}, #{price}, #{ice}, #{hot}, #{explain})
     </insert>
 
     <delete id="remove">
@@ -13,7 +13,7 @@
     </delete>
 
     <update id="modify">
-        UPDATE tbl_product set price = #{price}, ice_possible = #{ice_possible}, explain = #{explain} WHERE productid = #{productId}
+        UPDATE tbl_product set price = #{price}, ice = #{ice}, hot = #{hot}, explain = #{explain} WHERE productid = #{productId}
     </update>
 
     <select id="getList" resultType="com.coffeeshop.domain.ProductVO">
@@ -22,7 +22,7 @@
 			FROM
 			(
 				SELECT /*+ INDEX(tbl_product idx_product) */
-					rownum rn, productid, price, ice_possible, explain
+					rownum rn, productid, price, ice, hot, explain
 				FROM
 					tbl_product
 				WHERE
