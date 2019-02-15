@@ -59,7 +59,7 @@
         </div>
         <div class="card-footer">
 
-            <div class="row">
+            <div class="row no-gutters align-items-center mb-2">
 
                     <form id="searchForm" action="/board/list" method="get">
 
@@ -83,7 +83,7 @@
                                     or 내용 or 작성자</option>
                             </select>
 
-                            <input type='text' name='keyword' class="bg-light border-0 small d-none d-sm-inline-block form-inline navbar-search" aria-label="Search" aria-describedby="basic-addon2"
+                            <input type='text' name='keyword' class="bg-light small d-none d-sm-inline-block form-inline navbar-search" aria-label="Search" aria-describedby="basic-addon2"
                                    value='<c:out value="${pageMaker.cri.keyword }" />' /> <input
                                 type='hidden' name='pageNum'
                                 value='<c:out value="${pageMaker.cri.pageNum }" />'> <input
@@ -99,18 +99,18 @@
                 <div class="col mr-2">
                     <ul class="pagination">
                         <c:if test="${pageMaker.prev}">
-                            <li class="btn paginate_button previous"><a class="text"
+                            <li class="page-item previous paginate_button"><a class="page-link"
                                                                         href="${pageMaker.startPage -1 }">Previous</a></li>
                         </c:if>
 
                         <c:forEach var="num" begin="${pageMaker.startPage}"
                                    end="${pageMaker.endPage}">
-                            <li class="btn paginate_button ${pageMaker.cri.pageNum == num ? "active":"" }"><a class="text"
+                            <li class="page-item paginate_button ${pageMaker.cri.pageNum == num ? "active":"" }"><a class="page-link"
                                                                                                               href="${num}">${num}</a></li>
                         </c:forEach>
 
                         <c:if test="${pageMaker.next}">
-                            <li class="btn paginate_button next"><a class="text"
+                            <li class="page-item paginate_button next"><a class="page-link"
                                                                     href="${pageMaker.endPage +1 }">Next</a></li>
                         </c:if>
                     </ul>
