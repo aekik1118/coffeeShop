@@ -30,7 +30,7 @@ import lombok.extern.log4j.Log4j;
 
 @Controller
 @Log4j
-@RequestMapping("/board/*")
+@RequestMapping("/board/")
 @AllArgsConstructor
 public class BoardController {
 	private BoardService service;
@@ -45,12 +45,8 @@ public class BoardController {
 	public void list(Criteria cri, Model model) {
 		log.info("list");
 		model.addAttribute("list", service.getList(cri));
-		// model.addAttribute("pageMaker", new PageDTO(cri,123));
-
 		int total = service.getTotal(cri);
-
 		log.info("total: " + total);
-
 		model.addAttribute("pageMaker", new PageDTO(cri, total));
 	}
 
