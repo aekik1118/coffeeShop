@@ -38,11 +38,57 @@
         </div>
     </div>
 
+    <!-- reply -->
+
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">댓글</h6>
+            <div class="row no-gutters align-items-start">
+                <div class="col mr-4">
+                    <h6 class="m-0 font-weight-bold text-primary">댓글</h6>
+                </div>
+                <div class="col-auto">
+                    <button id="addReplyBtn" class='btn btn-primary btn-xs pull-right'>댓글 등록</button>
+                </div>
+            </div>
         </div>
         <div class="card-body">
+            <div class='row'>
+                <div class='col mb-4'>
+                    <div class='card border-left-primary shadow h-100 py-2'>
+                        <div class='card-body'>
+                            <form>
+                                <div class="form-group">
+                                    <label>댓글 쓰기</label>
+                                    <textarea class="form-control" rows="3" id='inputReply'></textarea>
+                                </div>
+                                <input type="hidden" name='replyer' value='Replyer' readonly="readonly">
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="chat">
+                <div class='row'>
+                    <div class='col mb-4'>
+                        <div class='card border-left-primary shadow h-100 py-2'>
+                            <div class='card-body'>
+                                <div class='row align-items-start'>
+                                    <div class='col mr-4'>
+                                        <div class='text-xs font-weight-bold text-primary text-uppercase mb-1'>user00</div>
+                                        <div class='h5 mb-0 font-weight-bold text-gray-800'>내용</div>
+                                    </div>
+                                    <div class='col-auto'>
+                                        <div class='h5 mb-0 text-gray-800'>날짜</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
 
         </div>
     </div>
@@ -61,9 +107,15 @@
         type='hidden' name='type' value='<c:out value="${cri.type}" />'>
 </form>
 
+<script src="/resources/js/reply.js"></script>
+
 <script>
+    console.log("aaaa");
     $(document).ready(function () {
+
+
         var operForm = $("#operForm");
+
 
         $("button[data-oper='modify']").on("click", function(e) {
             operForm.attr("action", "/board/modify").submit();
@@ -75,6 +127,130 @@
             operForm.attr("action", "/board/list");
             operForm.submit();
         });
+
+
+        /*reply*/
+
+        var bnoValue = '<c:out value="${board.bno}" />'
+        var replyUL = $(".chat");
+
+        showList(1);
+
+        function showList(page) {
+            replyService.getList({
+                        bno : bnoValue,
+                        page : page || 1
+                    }, function(replyCnt, list) {
+
+                        console.log("replyCnt: " + replyCnt);
+                        console.log("list: " + list);
+                        console.log(list);
+
+                        if (page == -1) {
+                            pageNum = Math.ceil(replyCnt / 10.0);
+                            showList(pageNum);
+                            return;
+                        }
+
+                        var str = "";
+                        if (list == null || list.length == 0) {
+                            replyUL.html("");
+                            return;
+                        }
+
+                        for (var i = 0, len = list.length || 0; i < len; i++) {
+                            str += "<div class='row'>\n" +
+                                "                    <div class='col mb-4' data-rno='"+list[i].rno+"'>\n" +
+                                "                        <div class='card border-left-primary shadow h-100 py-2'>\n" +
+                                "                            <div class='card-body'>\n" +
+                                "                                <div class='row align-items-start'>\n" +
+                                "                                    <div class='col mr-4'>\n" +
+                                "                                        <div class='text-xs font-weight-bold text-primary text-uppercase mb-1'>"+ list[i].replyer +"</div>\n" +
+                                "                                        <div class='h5 mb-0 font-weight-bold text-gray-800'>"+list[i].reply+"</div>\n" +
+                                "                                    </div>\n" +
+                                "                                    <div class='col-auto'>\n" +
+                                "                                        <div class='h5 mb-0 text-gray-800'>"+ replyService.displayTime(list[i].replyDate)+"</div>\n" +
+                                "                                    </div>\n" +
+                                "                                </div>\n" +
+                                "                            </div>\n" +
+                                "                        </div>\n" +
+                                "                    </div>\n" +
+                                "                </div>"
+                        }
+
+                        replyUL.html(str);
+                        showReplyPage(replyCnt);
+
+                function showReplyPage(replyCnt) {
+
+                    var endNum = Math.ceil(pageNum / 10.0) * 10;
+                    var startNum = endNum - 9;
+
+                    var prev = startNum != 1;
+                    var next = false;
+
+                    if (endNum * 10 >= replyCnt) {
+                        endNum = Math.ceil(replyCnt / 10.0);
+                    }
+
+                    if (endNum * 10 < replyCnt) {
+                        next = true;
+                    }
+
+                    var str = "<ul class='pagination pull-right'>";
+
+                    if (prev) {
+                        str += "<li class='page-item'><a class='page-link' href='"
+                            + (startNum - 1)
+                            + "'>Previous</a></li>";
+                    }
+
+                    for (var i = startNum; i <= endNum; i++) {
+                        var active = pageNum == i ? "active" : "";
+
+                        str += "<li class='page-item " + active+" '><a class='page-link' href='" + i + "'>"
+                            + i + "</a></li>";
+                    }
+
+                    if (next) {
+                        str += "<li class='page-item'><a class='page-link' href='"
+                            + (endNum + 1) + "'>Next</a></li>";
+                    }
+
+                    str += "</ul></div>";
+
+                    console.log(str);
+                    replyPageFooter.html(str);
+                }
+
+
+            });
+
+        }
+
+        /*reply add*/
+
+        var addReplyBtn = $("#addReplyBtn");
+
+        var InputReply = $("#inputReply")
+
+        addReplyBtn.on("click", function (e) {
+
+            console.log(InputReply.val());
+
+            var reply = {
+                reply : InputReply.val(),
+                replyer : "testReplyer",
+                bno : bnoValue
+            };
+
+            replyService.add(reply, function(result) {
+                alert(result);
+
+                //showList(1);
+                showList(-1);
+            });
+        })
 
     })
 
