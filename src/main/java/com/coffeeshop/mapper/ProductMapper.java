@@ -10,5 +10,6 @@ public interface ProductMapper {
     public int remove(String productid);
     public int modify(ProductVO product);
     public List<ProductVO> getList(Criteria cri);
+    public int getTotal();
 
 }

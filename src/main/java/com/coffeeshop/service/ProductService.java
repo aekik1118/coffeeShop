@@ -10,4 +10,5 @@ public interface ProductService {
     public int modify(ProductVO product);
     public int remove(String productid);
     public List<ProductVO> getList(Criteria cri);
+    public int getTotal();
 }

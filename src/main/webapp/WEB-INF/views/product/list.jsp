@@ -6,7 +6,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@include file="../includes/header.jsp" %>
 
 <!-- Begin Page Content -->
@@ -22,23 +22,62 @@
     <div class="row">
 
         <div class="col-lg-6 mb-4">
+            <table id="pd">
+                    <c:forEach items="${list}" var="product" varStatus="status">
 
-            <!-- Illustrations -->
-            <div class="card shadow mb-4">
-                <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">Illustrations</h6>
-                </div>
-                <div class="card-body">
-                    <div class="text-center">
-                        <img class="img-fluid px-3 px-sm-4 mt-3 mb-4" style="width: 25rem;" src="/resources/img/undraw_posting_photo.svg" alt="">
-                    </div>
-                    <p>Add some quality, svg illustrations to your project courtesy of <a target="_blank" rel="nofollow" href="https://undraw.co/">unDraw</a>, a constantly updated collection of beautiful svg images that you can use completely free and without attribution!</p>
-                    <a target="_blank" rel="nofollow" href="https://undraw.co/">Browse Illustrations on unDraw &rarr;</a>
-                </div>
-            </div>
+                        <c:if test="${status.index % 3 eq 0}"> <tr></c:if>
+                            <td>
+                                <!-- Illustrations -->
+                                <div class="card shadow mb-4">
+                                    <div class="card-header py-3">
+                                        <h6 class="m-0 font-weight-bold text-primary"><c:out value="${product.productId}" /> </h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="text-center">
+                                            <img class="img-fluid px-3 px-sm-4 mt-3 mb-4" style="width: 25rem;" src="/resources/img/undraw_posting_photo.svg" alt="">
+                                        </div>
+                                        <c:out value="${product.explain}"/>
+                                        <div>
+                                            Price : <c:out value="${product.price}" />
+                                            <c:if test="${product.ice eq true}"> ICE </c:if>
+                                            <c:if test="${product.hot eq true}"> HOT </c:if>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- end card shadow mb-4 -->
+                            </td>
+                        <c:if test="${status.count % 3 eq 0}"> <tr></c:if>
 
+                    </c:forEach>
+
+            </table>
         </div>
         <!-- end col-lg-6 mb-4 -->
+
+        <!-- start pagination -->
+        <div class="col-sm-12 col-md-7">
+            <div class="dataTables_paginate paging_simple_numbers">
+                <ul class="pagination">
+                    <c:if test="${pageMaker.prev }">
+                        <li class="paginate_button page-item previous disabled"><a href="${pageMaker.startPage -1 }">Previous</a></li>
+                    </c:if>
+
+                    <c:forEach var="num" begin="${pageMaker.startPage }" end="${pageMaker.endPage }">
+                        <li class="paginate_button page-item ${pageMaker.cri.pageNum == num ? 'active' : '' }" ><a href="${num }">${num }</a></li>
+                    </c:forEach>
+
+                    <c:if test="${pageMaker.next }">
+                        <li class="paginate_button next"><a href="${pageMaker.endPage +1 }">Next</a></li>
+                    </c:if>
+                </ul>
+            </div>
+        </div>
+        <!-- end pagination -->
+
+        <form id='actionForm' action="/product/list" method="get">
+            <input type="hidden" name="pageNum" value='${pageMaker.cri.pageNum }'>
+            <input type="hidden" name="amount" value='${pageMaker.cri.amount }'>
+        </form>
     </div>
     <!-- end row -->
 
@@ -97,6 +136,18 @@
 <script src="/resources/js/product.js"></script>
 <script>
     $(document).ready(function () {
+        var actionForm = $("#actionForm");
+        $(".paginate_button a").on("click", function (e) {
+            e.preventDefault();
+
+            actionForm.find("input[name='pageNum']").val($(this).attr("href"));
+            actionForm.submit();
+        });
+    });
+</script>
+
+<script>
+    $(document).ready(function () {
 
         $("#ice").on("change", function(){
             if($(this).is(':checked')) $(this).attr('value', 'true');
@@ -139,6 +190,10 @@
 
         $("#cancelBtn").on("click", function () {
             regModal.modal("hide");
+        });
+
+        $("#pd").on("click", "td", function () {
+            alert("click here");
         });
     });
 </script>

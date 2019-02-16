@@ -40,4 +40,12 @@ public class ProductServiceImpl implements ProductService {
         log.info("Product list ....");
         return mapper.getList(cri);
     }
+
+    @Override
+    public int getTotal() {
+        int totalResult = mapper.getTotal();
+
+        log.info("getTotal : " + totalResult);
+        return totalResult;
+    }
 }

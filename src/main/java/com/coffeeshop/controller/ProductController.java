@@ -1,5 +1,7 @@
 package com.coffeeshop.controller;
 
+import com.coffeeshop.domain.Criteria;
+import com.coffeeshop.domain.PageDTO;
 import com.coffeeshop.domain.ProductVO;
 import com.coffeeshop.service.ProductService;
 import lombok.AllArgsConstructor;
@@ -10,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("/product/")
@@ -22,8 +25,14 @@ public class ProductController {
     private ProductService service;
 
     @GetMapping("/list")
-    public void getList(){
+    public void getList(Criteria cri, Model model){
         log.info("product list");
+        log.info("list : "+ cri);
+
+        int Total = service.getTotal();
+
+        model.addAttribute("list", service.getList(cri));
+        model.addAttribute("pageMaker", new PageDTO(cri, Total));
     }
 
     @PostMapping(value = "/register", consumes = "application/json", produces = {MediaType.TEXT_PLAIN_VALUE})

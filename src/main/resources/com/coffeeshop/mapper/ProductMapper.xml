@@ -31,4 +31,8 @@
 			WHERE rn > (#{pageNum} - 1) * #{amount}
 		]]>
     </select>
+
+    <select id="getTotal" resultType="int">
+        SELECT COUNT(*) FROM tbl_product
+    </select>
 </mapper>
