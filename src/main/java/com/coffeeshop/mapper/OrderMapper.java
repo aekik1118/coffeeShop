@@ -8,8 +8,8 @@ public interface OrderMapper {
 
     public void insert(OrderVO vo);
     public int delete(int ono);
-    public void insertAmount();
-    public void insertPrice();
+    public void insertAmount(int amount);
+    public void insertPrice(int price);
     public List<OrderVO> watingList();
     public List<OrderVO> completeList();
 }
