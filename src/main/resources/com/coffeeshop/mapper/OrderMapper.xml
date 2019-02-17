@@ -26,6 +26,9 @@
         SELECT * FROM tbl_order where sold = 0
     </select>
 
+    <update id="complete">
+        update tbl_order set sold = 1 WHERE customer = #{customer}
+    </update>
     <select id="completeList" resultType="com.coffeeshop.domain.OrderVO">
         SELECT * FROM tbl_order where sold = 1
     </select>
