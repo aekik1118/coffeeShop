@@ -7,5 +7,6 @@ public class OrderedProductVO {
     private int ono;
     private int opno;
     private String product;
+    private int price;
     private int count;
 }

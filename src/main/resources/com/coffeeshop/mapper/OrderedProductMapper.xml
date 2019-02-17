@@ -6,8 +6,8 @@
 <mapper namespace="com.coffeeshop.mapper.OrderedProductMapper">
 
     <insert id="insert">
-    INSERT INTO tbl_orderedProduct (opno, ono, product, price)
-	values (seq_orderedProduct.nextval, #{ono}, #{product}, #{price})
+    INSERT INTO tbl_orderedProduct (opno, ono, product, price, count)
+	values (seq_orderedProduct.nextval, #{ono}, #{product}, #{price}, #{count})
 	</insert>
 
     <delete id="delete">
