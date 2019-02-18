@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface OrderService {
 
-    public void regist(OrderVO orderVO, OrderedProductVO orderedPVO);
+    public void choose(OrderVO orderVO, OrderedProductVO orderedPVO);
     public List<OrderVO> getWating();
     public boolean complete(String customer);
     public boolean cancle(String customer);

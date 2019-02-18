@@ -23,8 +23,8 @@ public class OrderServiceImpl implements OrderService{
     private OrderedProductMapper orderedPMapper;
 
     @Override
-    public void regist(OrderVO orderVO, OrderedProductVO orderedPVO) {
-        log.info("regist.......... :" + orderVO +"  " + orderedPVO);
+    public void choose(OrderVO orderVO, OrderedProductVO orderedPVO) {
+        log.info("choose.......... :" + orderVO +"  " + orderedPVO);
         mapper.insert(orderVO);
         orderedPMapper.insert(orderedPVO);
 
