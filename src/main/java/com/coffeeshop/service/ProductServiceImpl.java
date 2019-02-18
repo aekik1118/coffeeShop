@@ -48,4 +48,10 @@ public class ProductServiceImpl implements ProductService {
         log.info("getTotal : " + totalResult);
         return totalResult;
     }
+
+    @Override
+    public ProductVO get(String productid) {
+        log.info("get : " + productid);
+        return mapper.get(productid);
+    }
 }

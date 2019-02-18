@@ -11,4 +11,5 @@ public interface ProductService {
     public int remove(String productid);
     public List<ProductVO> getList(Criteria cri);
     public int getTotal();
+    public ProductVO get(String productid);
 }

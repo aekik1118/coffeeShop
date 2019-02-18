@@ -26,7 +26,7 @@
                     <c:forEach items="${list}" var="product" varStatus="status">
 
                         <c:if test="${status.index % 3 eq 0}"> <tr></c:if>
-                            <td>
+                            <td data-productid="${product.productId}">
                                 <!-- Illustrations -->
                                 <div class="card shadow mb-4">
                                     <div class="card-header py-3">
@@ -87,7 +87,7 @@
 </div>
 <!-- End of Main Content -->
 
-<div class="modal fade" id="regModal" tabindex="-1" role="dialog"
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
      aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -96,7 +96,7 @@
             </div>
 
             <div class="form-group">
-                <input type="text" class="form-control form-control-user" name="productid" placeholder="Product Name">
+                <input type="text" class="orm-control form-control-user" name="productid" placeholder="Product Name">
             </div>
 
             <div class="form-group row">
@@ -116,18 +116,7 @@
             </div>
 
             <div class="modal-footer">
-                <button id="registerBtn" class="btn btn-primary btn-icon-split">
-                    <span class="icon text-white-50">
-                      <i class="fas fa-check"></i>
-                    </span>
-                    <span class="text">Register</span>
-                </button>
-                <button id="cancelBtn" class="btn btn-secondary btn-icon-split">
-                    <span class="icon text-white-50">
-                      <i class="fas fa-arrow-right"></i>
-                    </span>
-                    <span class="text">Cancel</span>
-                </button>
+
             </div>
         </div>
     </div>
@@ -149,6 +138,13 @@
 <script>
     $(document).ready(function () {
 
+        var myModal = $("#myModal");
+        var modalInputProductId = myModal.find("input[name='productid']");
+        var modalInputPrice = myModal.find("input[name='price']");
+        var modalInputIce = myModal.find("input[name='ice']");
+        var modalInputHot = myModal.find("input[name='hot']");
+        var modalInputExplain = myModal.find("input[name='explain']");
+
         $("#ice").on("change", function(){
             if($(this).is(':checked')) $(this).attr('value', 'true');
             else $(this).attr('value', 'false');
@@ -160,41 +156,139 @@
         });
 
         $("#regBtn").on("click", function () {
-            $("#regModal").modal("show");
-        });
 
-        var regModal = $("#regModal");
-        var modalInputProductId = regModal.find("input[name='productid']");
-        var modalInputPrice = regModal.find("input[name='price']");
-        var modalInputIce = regModal.find("input[name='ice']");
-        var modalInputHot = regModal.find("input[name='hot']");
-        var modalInputExplain = regModal.find("input[name='explain']");
+            var str = " <button id=\"registerBtn\" class=\"btn btn-primary btn-icon-split\">\n" +
+                "                    <span class=\"icon text-white-50\">\n" +
+                "                      <i class=\"fas fa-check\"></i>\n" +
+                "                    </span>\n" +
+                "                    <span class=\"text\">Register</span>\n" +
+                "                </button>\n" +
+                "                <button id=\"cancelBtn\" class=\"btn btn-secondary btn-icon-split\">\n" +
+                "                    <span class=\"icon text-white-50\">\n" +
+                "                      <i class=\"fas fa-arrow-right\"></i>\n" +
+                "                    </span>\n" +
+                "                    <span class=\"text\">Cancel</span>\n" +
+                "                </button>";
+            $(".modal-footer").html(str);
 
-        $("#registerBtn").on("click", function () {
+            $("#myModal").modal("show");
 
-            var product = {
-                productId : modalInputProductId.val(),
-                price : modalInputPrice.val(),
-                ice : modalInputIce.val(),
-                hot : modalInputHot.val(),
-                explain : modalInputExplain.val()
-            };
+            $("#cancelBtn").on("click", function () {
+                myModal.find("input").val("");
+                modalInputIce.removeAttr("checked");
+                modalInputHot.removeAttr("checked");
+                myModal.modal("hide");
+            }); // cancelBtn on click
 
-            productService.register(product, function (result) {
-                alert(result);
+            $("#registerBtn").on("click", function () {
 
-                regModal.find("input").val("");
-                regModal.modal("hide");
-            });
-        });
+                var product = {
+                    productId : modalInputProductId.val(),
+                    price : modalInputPrice.val(),
+                    ice : modalInputIce.val(),
+                    hot : modalInputHot.val(),
+                    explain : modalInputExplain.val()
+                };
 
-        $("#cancelBtn").on("click", function () {
-            regModal.modal("hide");
-        });
+                productService.register(product, function (result) {
+                    alert(result);
+
+                    myModal.find("input").val("");
+                    modalInputIce.removeAttr("checked");
+                    modalInputHot.removeAttr("checked");
+                    myModal.modal("hide");
+                    location.reload();
+                });
+            }); // end registerBtn on click
+
+
+
+        }); // end regBtn on click
 
         $("#pd").on("click", "td", function () {
-            alert("click here");
-        });
+            var productid = $(this).data("productid");
+
+            modalInputProductId.attr("readonly", "readonly");
+
+            productService.get(productid, function (product) {
+                modalInputProductId.val(product.productId);
+                modalInputPrice.val(product.price);
+                modalInputIce.val(product.ice);
+                if(product.ice == true) modalInputIce.attr("checked", "checked");
+                if(product.hot == true) modalInputHot.attr("checked", "checked");
+                modalInputExplain.val(product.explain);
+            });
+
+            var str = "<button id=\"updateBtn\" class=\"btn btn-primary btn-icon-split\">\n" +
+                "                    <span class=\"icon text-white-50\">\n" +
+                "                      <i class=\"fas fa-check\"></i>\n" +
+                "                    </span>\n" +
+                "                    <span class=\"text\">Update</span>\n" +
+                "                </button>\n" +
+                "                <button id=\"removeBtn\" class=\"btn btn-danger btn-icon-split\">\n" +
+                "                    <span class=\"icon text-white-50\">\n" +
+                "                      <i class=\"fas fa-trash\"></i>\n" +
+                "                    </span>\n" +
+                "                    <span class=\"text\">Remove</span>\n" +
+                "                </button>\n" +
+                "                <button id=\"cancelBtn\" class=\"btn btn-secondary btn-icon-split\">\n" +
+                "                    <span class=\"icon text-white-50\">\n" +
+                "                      <i class=\"fas fa-arrow-right\"></i>\n" +
+                "                    </span>\n" +
+                "                    <span class=\"text\">Cancel</span>\n" +
+                "                </button>";
+
+            $(".modal-footer").html(str);
+
+            myModal.modal("show");
+
+            $("#updateBtn").on("click", function () {
+                var product = {
+                    productId : modalInputProductId.val(),
+                    price : modalInputPrice.val(),
+                    ice : modalInputIce.val(),
+                    hot : modalInputHot.val(),
+                    explain : modalInputExplain.val()
+                };
+
+                productService.update(product, function (result) {
+                    alert(result);
+
+                    myModal.find("input").val("");
+                    modalInputProductId.removeAttr("readonly");
+                    modalInputIce.removeAttr("checked");
+                    modalInputHot.removeAttr("checked");
+                    myModal.modal("hide");
+                    location.reload();
+                });
+
+            }); // end updateBtn on click
+
+            $("#removeBtn").on("click", function () {
+                productService.remove(productid, function (result) {
+                    alert(result);
+
+                    myModal.find("input").val("");
+                    modalInputProductId.removeAttr("readonly");
+                    modalInputIce.removeAttr("checked");
+                    modalInputHot.removeAttr("checked");
+                    myModal.modal("hide");
+
+                    location.reload();
+                });
+
+            }); // end removeBtn on click
+
+            $("#cancelBtn").on("click", function () {
+                myModal.find("input").val("");
+                modalInputIce.removeAttr("checked");
+                modalInputHot.removeAttr("checked");
+                modalInputProductId.removeAttr("readonly");
+                myModal.modal("hide");
+            }); // end cacelBtn on click
+
+        }); // end pd on click
+
     });
 </script>
 

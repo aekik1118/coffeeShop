@@ -35,4 +35,8 @@
     <select id="getTotal" resultType="int">
         SELECT COUNT(*) FROM tbl_product
     </select>
+
+    <select id="get" resultType="com.coffeeshop.domain.ProductVO">
+        SELECT * FROM tbl_product WHERE productid = #{productid}
+    </select>
 </mapper>
