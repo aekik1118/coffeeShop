@@ -17,4 +17,8 @@
     <select id="select" resultType="com.coffeeshop.domain.OrderedProductVO">
 		SELECT * FROM tbl_orderedProduct WHERE ono = #{ono}
 	</select>
+
+    <delete id="cancle">
+        DELETE from tbl_orderedProduct where ono = #{ono}
+    </delete>
 </mapper>

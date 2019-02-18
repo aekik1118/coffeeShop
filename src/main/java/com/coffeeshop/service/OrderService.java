@@ -7,9 +7,13 @@ import java.util.List;
 
 public interface OrderService {
 
-    public void choose(OrderVO orderVO, OrderedProductVO orderedPVO);
+    public void regist(OrderVO orderVO);
+    public void setChoose(OrderedProductVO orderedPVO);
+    public boolean removeChoose(int opno);
+    public List<OrderedProductVO> getChooseList(int ono);
+    public void setOrder(OrderVO orderVO, int amount, int total);
     public List<OrderVO> getWating();
-    public boolean complete(String customer, String managetr);
-    public boolean cancle(String customer);
+    public boolean complete(String customer, String manager);
+    public boolean cancle(int ono);
 
 }

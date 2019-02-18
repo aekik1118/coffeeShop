@@ -18,8 +18,8 @@
         INSERT  INTO tbl_order (amount) values (#{aount})
     </insert>
 
-    <insert id="insertPrice">
-        INSERT INTO tbl_order (price) values (#{price})
+    <insert id="insertTotal">
+        INSERT INTO tbl_order (total) values (#{total})
     </insert>
 
     <select id="watingList" resultType="com.coffeeshop.domain.OrderVO">
@@ -27,7 +27,8 @@
     </select>
 
     <update id="setSold">
-        update tbl_order set sold = 1, manager = {manager} WHERE customer = #{customer}
+        update tbl_order set sold = 1, manager = {manager}, odate = sysdate
+        WHERE customer = #{customer}
     </update>
     <select id="completeList" resultType="com.coffeeshop.domain.OrderVO">
         SELECT * FROM tbl_order where sold = 1

@@ -10,7 +10,7 @@ public class OrderVO {
     private int ono;
     private String customer;
     private int amount;
-    private int price;
+    private int total;
     private String manager;
     private Date odate;
     private boolean sold;

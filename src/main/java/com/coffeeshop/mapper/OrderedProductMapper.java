@@ -7,6 +7,7 @@ import java.util.List;
 public interface OrderedProductMapper {
 
     public void insert(OrderedProductVO vo);
-    public void delete(int opno);
+    public boolean delete(int opno);
     public List<OrderedProductVO> select(int ono);
+    public void cancle(int ono);
 }

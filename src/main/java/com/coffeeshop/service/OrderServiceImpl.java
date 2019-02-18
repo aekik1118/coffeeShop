@@ -23,21 +23,51 @@ public class OrderServiceImpl implements OrderService{
     private OrderedProductMapper orderedPMapper;
 
     @Override
-    public void choose(OrderVO orderVO, OrderedProductVO orderedPVO) {
-        log.info("choose.......... :" + orderVO +"  " + orderedPVO);
+    public void regist(OrderVO orderVO){
+        log.info("regist.............:" + orderVO);
         mapper.insert(orderVO);
+    }
+    @Override
+    public void setChoose(OrderedProductVO orderedPVO){
+        log.info("setChoose............:" + orderedPVO);
         orderedPMapper.insert(orderedPVO);
+    }
 
-        int amount = 0;
-        int price = 0;
-        for(OrderedProductVO vo : orderedPMapper.select(orderVO.getOno())) {
-            amount += vo.getCount();
-            price += vo.getCount() * vo.getPrice();
-        }
+    @Override
+    public boolean removeChoose(int opno){
+        log.info("removeChoose............:" + opno);
+        return orderedPMapper.delete(opno);
+    }
+
+    @Override
+    public List<OrderedProductVO> getChooseList(int ono){
+        log.info("getChooseList.............:" + orderedPMapper.select(ono));
+        return orderedPMapper.select(ono);
+    }
+
+    @Override
+    public void setOrder(OrderVO orderVO, int amount, int total){
 
         mapper.insertAmount(amount);
-        mapper.insertPrice(price);
+        mapper.insertTotal(total);
+        log.info("setOrder................" + orderVO);
     }
+//    @Override
+//    public void choose(OrderVO orderVO, OrderedProductVO orderedPVO) {
+//        log.info("choose.......... :" + orderVO +"  " + orderedPVO);
+//        mapper.insert(orderVO);
+//        orderedPMapper.insert(orderedPVO);
+
+//        int amount = 0;
+//        int price = 0;
+//        for(OrderedProductVO vo : orderedPMapper.select(orderVO.getOno())) {
+//            amount += vo.getCount();
+//            price += vo.getCount() * vo.getPrice();
+//        }
+
+//        mapper.insertAmount(amount);
+//        mapper.insertPrice(price);
+//    }
 
     @Override
     public List<OrderVO> getWating() {
@@ -53,8 +83,10 @@ public class OrderServiceImpl implements OrderService{
     }
 
     @Override
-    public boolean cancle(String customer) {
+    public boolean cancle(int ono) {
 
-        return false;
+        log.info("cancle...............:" + ono);
+        orderedPMapper.delete(ono);
+        return mapper.delete(ono);
     }
 }
