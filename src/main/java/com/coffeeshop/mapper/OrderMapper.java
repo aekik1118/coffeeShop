@@ -11,6 +11,6 @@ public interface OrderMapper {
     public void insertAmount(int amount);
     public void insertPrice(int price);
     public List<OrderVO> watingList();
-    public boolean setSold(String customer);
+    public boolean setSold(String customer, String manager);
     public List<OrderVO> completeList();
 }

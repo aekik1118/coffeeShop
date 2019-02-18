@@ -6,8 +6,8 @@
 <mapper namespace="com.coffeeshop.mapper.OrderMapper">
 
     <insert id="insert">
-    INSERT INTO tbl_order (ono, customer, manager)
-	values (seq_order.nextval, #{customer}, #{manager})
+    INSERT INTO tbl_order (ono, customer)
+	values (seq_order.nextval, #{customer})
 	</insert>
 
     <delete id="delete">
@@ -27,7 +27,7 @@
     </select>
 
     <update id="setSold">
-        update tbl_order set sold = 1 WHERE customer = #{customer}
+        update tbl_order set sold = 1, manager = {manager} WHERE customer = #{customer}
     </update>
     <select id="completeList" resultType="com.coffeeshop.domain.OrderVO">
         SELECT * FROM tbl_order where sold = 1

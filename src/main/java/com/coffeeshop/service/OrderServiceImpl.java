@@ -47,9 +47,9 @@ public class OrderServiceImpl implements OrderService{
     }
 
     @Override
-    public boolean complete(String customer) {
+    public boolean complete(String customer, String manager) {
 
-        return mapper.setSold(customer);
+        return mapper.setSold(customer, manager);
     }
 
     @Override

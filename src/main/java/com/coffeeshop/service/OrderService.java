@@ -9,7 +9,7 @@ public interface OrderService {
 
     public void choose(OrderVO orderVO, OrderedProductVO orderedPVO);
     public List<OrderVO> getWating();
-    public boolean complete(String customer);
+    public boolean complete(String customer, String managetr);
     public boolean cancle(String customer);
 
 }
