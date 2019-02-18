@@ -32,7 +32,7 @@ public class OrderServiceImpl implements OrderService{
         int price = 0;
         for(OrderedProductVO vo : orderedPMapper.select(orderVO.getOno())) {
             amount += vo.getCount();
-            price += vo.getCount() + vo.getPrice();
+            price += vo.getCount() * vo.getPrice();
         }
 
         mapper.insertAmount(amount);
