@@ -84,6 +84,7 @@ var replyService = (function() {
 	}
 
 	function get(rno, callback, error) {
+		console.log("get : "+ rno);
 		$.get("/replies/" + rno + ".json", function(result) {
 			if (callback) {
 				callback(result);

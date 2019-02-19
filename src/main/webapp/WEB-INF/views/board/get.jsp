@@ -10,6 +10,13 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@ include file="../includes/header.jsp" %>
 
+<style>
+    ul{
+        list-style:none;
+        padding-left:0px;
+    }
+</style>
+
 <div class="container-fluid">
     <div class="card shadow mb-4">
         <div class="card-header py-3">
@@ -52,24 +59,27 @@
             </div>
         </div>
         <div class="card-body">
-            <div class='row'>
-                <div class='col mb-4'>
-                    <div class='card border-left-primary shadow h-100 py-2'>
-                        <div class='card-body'>
-                            <form>
-                                <div class="form-group">
-                                    <label>댓글 쓰기</label>
-                                    <textarea class="form-control" rows="3" id='inputReply'></textarea>
-                                </div>
-                                <input type="hidden" name='replyer' value='Replyer' readonly="readonly">
-                            </form>
+            <ul>
+                <li class='row'>
+                    <div class='col mb-4'>
+                        <div class='card border-left-primary shadow h-100 py-2'>
+                            <div class='card-body'>
+                                <form>
+                                    <div class="form-group">
+                                        <label>댓글 쓰기</label>
+                                        <textarea class="form-control" rows="3" id='inputReply'></textarea>
+                                    </div>
+                                    <input type="hidden" name='replyer' value='Replyer' readonly="readonly">
+                                </form>
 
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
-            <div class="replybody">
-                <div class='row'>
+                </li>
+            </ul>
+
+            <ul class="replybody">
+                <li>
                     <div class='col mb-4'>
                         <div class='card border-left-primary shadow h-100 py-2'>
                             <div class='card-body'>
@@ -85,16 +95,32 @@
                             </div>
                         </div>
                     </div>
-                </div>
-
-
-            </div>
+                </li>
+            </ul>
 
         </div>
 
         <div class="card-footer replyfooter"></div>
     </div>
 
+</div>
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">댓글 설정</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-footer">
+                <button id='modalReplyRemoveBtn' class="btn btn-danger" type="button" data-dismiss="modal">삭제</button>
+                <button id='modalRegRereplyBtn' class="btn btn-primary" type="button" data-dismiss="modal">대댓글</button>
+                <button id='modalCloseBtn' class="btn btn-secondary" type="button" data-dismiss="modal">닫기</button>
+            </div>
+        </div>
+    </div>
 </div>
 
 <form id='operForm' action="/board/modify" method="get">
@@ -134,7 +160,7 @@
         /*reply*/
 
         var bnoValue = '<c:out value="${board.bno}" />'
-        var replyUL = $(".replybody");
+        var replyBody = $(".replybody");
         var replyFooter = $(".replyfooter");
 
         showList(-1);
@@ -157,15 +183,15 @@
 
                         var str = "";
                         if (list == null || list.length == 0) {
-                            replyUL.html("");
+                            replyBody.html("");
                             return;
                         }
 
                         for (var i = 0, len = list.length || 0; i < len; i++) {
-                            str += "<div class='row'>\n" +
-                                "                    <div class='col mb-4' data-rno='"+list[i].rno+"'>\n" +
+                            str += "<li data-rno='"+list[i].rno+"' data-replyer='"+list[i].replyer+"'>\n" +
+                                "                    <div class='col mb-4'>\n" +
                                 "                        <div class='card border-left-primary shadow h-100 py-2'>\n" +
-                                "                            <div class='card-body'>\n" +
+                                "                            <div class='card-body reply-card-body' >\n" +
                                 "                                <div class='row align-items-start'>\n" +
                                 "                                    <div class='col mr-4'>\n" +
                                 "                                        <div class='text-xs font-weight-bold text-primary text-uppercase mb-1'>"+ list[i].replyer +"</div>\n" +
@@ -178,10 +204,10 @@
                                 "                            </div>\n" +
                                 "                        </div>\n" +
                                 "                    </div>\n" +
-                                "                </div>"
+                                "                </li>"
                         }
 
-                        replyUL.html(str);
+                        replyBody.html(str);
                         showReplyPage(replyCnt);
             });
 
@@ -224,8 +250,6 @@
             }
 
             str += "</ul></div>";
-
-            console.log(str);
             replyFooter.html(str);
         }
 
@@ -266,7 +290,43 @@
                 showList(-1);
             });
         });
+        
+        /*reply modal*/
 
+        var myModal = $("#myModal");
+        var modalReplyRemoveBtn = $("#modalReplyRemoveBtn");
+        var modalRegRereplyBtn = $("modalRegRereplyBtn");
+        var replyCardBody = $("reply-card-body");
+        var modalInputRno;
+
+
+        replyBody.on("click","li", function (e) {
+            var rno = $(this).data("rno");
+            console.log(rno);
+            replyService.get(rno, function(reply) {
+                console.log("get success "+ reply.rno);
+                myModal.data("rno", reply.rno);
+                myModal.data("replyer",reply.replyer);
+                myModal.modal("show");
+            });
+
+        });
+
+        /*reply remove*/
+
+        modalReplyRemoveBtn.on("click", function (e) {
+            console.log("remove click!");
+            var rno = myModal.data("rno");
+            var replyer = myModal.data("replyer");
+            console.log(rno);
+            console.log(replyer);
+
+            replyService.remove(rno, replyer, function(result) {
+                alert(result);
+                myModal.modal("hide");
+                showList(-1);
+            })
+        });
 
 
     })
