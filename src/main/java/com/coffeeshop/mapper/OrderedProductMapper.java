@@ -10,4 +10,7 @@ public interface OrderedProductMapper {
     public boolean delete(int opno);
     public List<OrderedProductVO> select(int ono);
     public void cancle(int ono);
+    public int allProductCount();
+    public int singleProductCount(String product);
+
 }

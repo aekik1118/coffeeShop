@@ -21,4 +21,16 @@
     <delete id="cancle">
         DELETE from tbl_orderedProduct where ono = #{ono}
     </delete>
+
+    <select id="allProductCount" resultType="int">
+        <![CDATA[
+        SELECT sum(count) FROM tbl_orderedProduct
+        ]]>
+    </select>
+
+    <select id="singleProductCount" resultType="int">
+        <![CDATA[
+        SELECT count(opno) FROM tbl_orderedProduct WHERE product = #{product}
+        ]]>
+    </select>
 </mapper>

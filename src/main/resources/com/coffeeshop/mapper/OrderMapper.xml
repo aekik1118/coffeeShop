@@ -30,8 +30,21 @@
         update tbl_order set sold = 1, manager = {manager}, odate = sysdate
         WHERE customer = #{customer}
     </update>
+
     <select id="completeList" resultType="com.coffeeshop.domain.OrderVO">
         SELECT * FROM tbl_order where sold = 1
+    </select>
+
+    <select id="getOnoCount" resultType="int">
+        <![CDATA[
+        SELECT count(ono) FROM tbl_order where sold = 1;
+        ]]>
+    </select>
+
+    <select id="getTotalSales" resultType="int">
+        <![CDATA[
+        SELECT sum(total) FROM tbl_order where sold = 1;
+        ]]>
     </select>
 
 </mapper>
