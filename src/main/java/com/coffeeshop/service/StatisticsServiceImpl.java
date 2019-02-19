@@ -9,6 +9,10 @@ import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 @Log4j
@@ -28,17 +32,47 @@ public class StatisticsServiceImpl implements StatisticsService {
     }
 
     @Override
-    public StatisticsDTO getStatistics() {
+    public List<StatisticsDTO> getStatisticsList(String startDate) {
+
         StatisticsDTO statistics = new StatisticsDTO();
-        statistics.setOrderCnt(mapper.getOnoConunt());
-        statistics.setProductCnt(orderedPMapper.allProductCount());
-        statistics.setTotalSales(mapper.getTotalSales());
-        return statistics;
+        List<StatisticsDTO> statisticsList = new ArrayList<>();
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+
+        try {
+            Date xDate = format.parse(startDate);
+
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(xDate);
+            for(int i = 0; i < 15; i++ ) {
+                cal.add(Calendar.DATE, 1);
+                statistics.setOrderCnt(mapper.getOnoCount(cal.getTime()));
+                statistics.setProductCnt(orderedPMapper.allProductCount(cal.getTime()));
+                statistics.setTotalSales(mapper.getTotalSales(cal.getTime()));
+                statisticsList.add(statistics);
+            }
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return statisticsList;
     }
 
     @Override
-    public int getSingleProductCnt(String product) {
-        return orderedPMapper.singleProductCount(product);
+    public int getSingleProductCnt(String product, String xDate) {
+
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = new Date();
+
+        try {
+
+            date = format.parse(xDate);
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return orderedPMapper.singleProductCount(product, date);
     }
 
 
