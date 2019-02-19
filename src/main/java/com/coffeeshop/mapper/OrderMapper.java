@@ -2,6 +2,7 @@ package com.coffeeshop.mapper;
 
 import com.coffeeshop.domain.OrderVO;
 
+import java.util.Date;
 import java.util.List;
 
 public interface OrderMapper {
@@ -13,6 +14,6 @@ public interface OrderMapper {
     public List<OrderVO> watingList();
     public boolean setSold(String customer, String manager);
     public List<OrderVO> completeList();
-    public int getOnoConunt ();
-    public int getTotalSales();
+    public int getOnoConunt (Date xdate);
+    public int getTotalSales(Date xdate);
 }

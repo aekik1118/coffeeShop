@@ -25,12 +25,15 @@
     <select id="allProductCount" resultType="int">
         <![CDATA[
         SELECT sum(count) FROM tbl_orderedProduct
+        where TO_CHAR(opdate,'yyyy-mm-dd') = TO_CHAR({xDate},'yyyy-mm-dd')
         ]]>
     </select>
 
     <select id="singleProductCount" resultType="int">
         <![CDATA[
-        SELECT count(opno) FROM tbl_orderedProduct WHERE product = #{product}
+        SELECT count(opno) FROM tbl_orderedProduct
+        WHERE product = #{product}
+        and TO_CHAR(opdate,'yyyy-mm-dd') = TO_CHAR({xDate},'yyyy-mm-dd')
         ]]>
     </select>
 </mapper>

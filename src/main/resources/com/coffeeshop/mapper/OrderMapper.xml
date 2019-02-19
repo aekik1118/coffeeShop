@@ -37,13 +37,15 @@
 
     <select id="getOnoCount" resultType="int">
         <![CDATA[
-        SELECT count(ono) FROM tbl_order where sold = 1;
+        SELECT count(ono) FROM tbl_order
+        where sold = 1 and TO_CHAR(odate,'yyyy-mm-dd') = TO_CHAR({xDate},'yyyy-mm-dd')
         ]]>
     </select>
 
     <select id="getTotalSales" resultType="int">
         <![CDATA[
-        SELECT sum(total) FROM tbl_order where sold = 1;
+        SELECT sum(total) FROM tbl_order
+        where sold = 1 and TO_CHAR(odate,'yyyy-mm-dd') = TO_CHAR({xDate},'yyyy-mm-dd')
         ]]>
     </select>
 
