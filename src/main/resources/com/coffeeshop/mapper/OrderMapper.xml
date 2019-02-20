@@ -15,11 +15,11 @@
     </delete>
 
     <insert id="insertAmount">
-        INSERT  INTO tbl_order (amount) values (#{aount})
+        INSERT  INTO tbl_order (amount) values (#{aount}) where ono =  #{ono}
     </insert>
 
     <insert id="insertTotal">
-        INSERT INTO tbl_order (total) values (#{total})
+        INSERT INTO tbl_order (total) values (#{total}) where ono = #{ono}
     </insert>
 
     <select id="watingList" resultType="com.coffeeshop.domain.OrderVO">

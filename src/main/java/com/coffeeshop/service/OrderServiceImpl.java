@@ -48,8 +48,8 @@ public class OrderServiceImpl implements OrderService{
     @Override
     public void setOrder(OrderVO orderVO, int amount, int total){
 
-        mapper.insertAmount(amount);
-        mapper.insertTotal(total);
+        mapper.insertAmount(orderVO.getOno(), amount);
+        mapper.insertTotal(orderVO.getOno(), total);
         log.info("setOrder................" + orderVO);
     }
 //    @Override
@@ -89,4 +89,5 @@ public class OrderServiceImpl implements OrderService{
         orderedPMapper.delete(ono);
         return mapper.delete(ono);
     }
+
 }
