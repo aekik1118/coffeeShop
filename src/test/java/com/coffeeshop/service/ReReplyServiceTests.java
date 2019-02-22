@@ -28,12 +28,17 @@ public class ReReplyServiceTests {
         ReReplyVO reReplyVO = new ReReplyVO();
 
         reReplyVO.setBno(14345L);
-        reReplyVO.setParentRno(1L);
+        reReplyVO.setParentRno(9L);
         reReplyVO.setReply("test Rereply");
         reReplyVO.setReplyer("testRereplyer");
 
         service.register(reReplyVO);
         log.info(service.get(reReplyVO.getRno()));
         service.remove(reReplyVO.getRno());
+    }
+
+    @Test
+    public void getListTest(){
+        service.getList(1L).forEach(reReplyVO -> log.info(reReplyVO));
     }
 }

@@ -116,7 +116,7 @@
             </div>
             <div class="modal-footer">
                 <button id='modalReplyRemoveBtn' class="btn btn-danger" type="button" data-dismiss="modal">삭제</button>
-                <button id='modalRegRereplyBtn' class="btn btn-primary" type="button" data-dismiss="modal">대댓글</button>
+                <button id='modalRegRereplyBtn' class="btn btn-primary" type="button" data-dismiss="modal">대댓글 등록</button>
                 <button id='modalCloseBtn' class="btn btn-secondary" type="button" data-dismiss="modal">닫기</button>
             </div>
         </div>
@@ -136,6 +136,7 @@
 </form>
 
 <script src="/resources/js/reply.js"></script>
+<script src="/resources/js/rereply.js"></script>
 
 <script>
     $(document).ready(function () {
@@ -188,12 +189,12 @@
                         }
 
                         for (var i = 0, len = list.length || 0; i < len; i++) {
-                            str += "<li data-rno='"+list[i].rno+"' data-replyer='"+list[i].replyer+"'>\n" +
+                            str += "<li>\n" +
                                 "                    <div class='col mb-4'>\n" +
                                 "                        <div class='card border-left-primary shadow h-100 py-2'>\n" +
                                 "                            <div class='card-body reply-card-body' >\n" +
                                 "                                <div class='row align-items-start'>\n" +
-                                "                                    <div class='col mr-4'>\n" +
+                                "                                    <div class='col mr-lg-5'>\n" +
                                 "                                        <div class='text-xs font-weight-bold text-primary text-uppercase mb-1'>"+ list[i].replyer +"</div>\n" +
                                 "                                        <div class='h5 mb-0 font-weight-bold text-gray-800'>"+list[i].reply+"</div>\n" +
                                 "                                    </div>\n" +
@@ -201,6 +202,18 @@
                                 "                                        <div class='h5 mb-0 text-gray-800'>"+ replyService.displayTime(list[i].replyDate)+"</div>\n" +
                                 "                                    </div>\n" +
                                 "                                </div>\n" +
+                                "                            </div>\n" +
+                                "                            <div class='card-footer py-sm-0'>\n" +
+                                "                            <ul id='rerepliesbody'>" +
+                                "                                <div class='row align-items-start'>\n" +
+                                "                                    <div class='col-auto'>\n" +
+                                "                                        <div class= 'h5 mb-0 text-gray-800 btn' id='rereplyregbtn' data-rno='"+list[i].rno+"' data-replyer='"+list[i].replyer+"'> 답글  </div>\n" +
+                                "                                    </div>\n" +
+                                "                                    <div class='col-auto'>\n" +
+                                "                                        <div class= 'h5 mb-0 text-gray-800 btn' id='rereplylistbtn' data-rno='"+list[i].rno+"' data-replyer='"+list[i].replyer+"'> 답글보기  </div>\n" +
+                                "                                    </div>\n" +
+                                "                                </div>" +
+                                "                            </ul>" +
                                 "                            </div>\n" +
                                 "                        </div>\n" +
                                 "                    </div>\n" +
@@ -297,10 +310,10 @@
         var modalReplyRemoveBtn = $("#modalReplyRemoveBtn");
         var modalRegRereplyBtn = $("modalRegRereplyBtn");
         var replyCardBody = $("reply-card-body");
-        var modalInputRno;
 
 
-        replyBody.on("click","li", function (e) {
+
+     /*   replyBody.on("click","li", function (e) {
             var rno = $(this).data("rno");
             console.log(rno);
             replyService.get(rno, function(reply) {
@@ -310,7 +323,7 @@
                 myModal.modal("show");
             });
 
-        });
+        });*/
 
         /*reply remove*/
 
@@ -328,7 +341,88 @@
             })
         });
 
+        /*rereply*/
 
+        /*var rereplyRegBtn = $("#rereplyregbtn");
+        var rereplyListBtn = $("#rereplylistbtn");
+
+        rereplyRegBtn.on("click",function (e) {
+            var rno = $(this).data("rno");
+            console.log(rno);
+        })
+*/
+        replyBody.on("click","#rereplyregbtn", function (e) {
+            var rno = $(this).data("rno");
+            console.log(rno);
+        });
+
+        replyBody.on("click","#rereplylistbtn", function (e) {
+            var rno = $(this).data("rno");
+            var replyer = $(this).data("replyer")
+            var rerepliesBody = $(this).closest("ul");
+            var str = "";
+
+            reReplyService.getList(rno, function(list){
+
+                console.log("getrerepliesList" + rno);
+
+
+                if (list == null || list.length == 0) {
+                    console.log("null?");
+                    return;
+                }
+
+                for(var i=0; i<list.length; i++){
+                    str += "<li>\n" +
+                        "                    <div class='col mb-4'>\n" +
+                        "                        <div class='card border-left-primary shadow h-100 py-2'>\n" +
+                        "                            <div class='card-body reply-card-body' >\n" +
+                        "                                <div class='row align-items-start'>\n" +
+                        "                                    <div class='col mr-lg-5'>\n" +
+                        "                                        <div class='text-xs font-weight-bold text-primary text-uppercase mb-1'>"+ list[i].replyer +"</div>\n" +
+                        "                                        <div class='h5 mb-0 font-weight-bold text-gray-800'>"+list[i].reply+"</div>\n" +
+                        "                                    </div>\n" +
+                        "                                    <div class='col-auto'>\n" +
+                        "                                        <div class='h5 mb-0 text-gray-800'>"+ replyService.displayTime(list[i].replyDate)+"</div>\n" +
+                        "                                    </div>\n" +
+                        "                                </div>\n" +
+                        "                            </div>\n" +
+                        "                        </div>\n" +
+                        "                    </div>\n" +
+                        "                </li>" ;
+                }
+
+                str +=  "<div class='row align-items-start'>\n" +
+                    "    <div class='col-auto'>\n" +
+                    "        <div class= 'h5 mb-0 text-gray-800 btn' id='rereplyregbtn' data-rno='"+rno+"' data-replyer='"+replyer+"'> 답글  </div>\n" +
+                    "    </div>\n" +
+                    "    <div class='col-auto'>\n" +
+                    "        <div class= 'h5 mb-0 text-gray-800 btn' id='rereplylistHidebtn' data-rno='"+rno+"' data-replyer='"+replyer+"'> 답글 숨기기 </div>\n" +
+                    "    </div>\n" +
+                    "</div>\n";
+                rerepliesBody.html(str);
+            });
+        });
+
+        replyBody.on("click","#rereplylistHidebtn", function (e) {
+            console.log("listHide");
+            var rno = $(this).data("rno");
+            var replyer = $(this).data("replyer")
+            var rerepliesBody = $(this).closest("ul");
+            var str = "";
+
+            str +=  "<div class='row align-items-start'>\n" +
+                "    <div class='col-auto'>\n" +
+                "        <div class= 'h5 mb-0 text-gray-800 btn' id='rereplyregbtn' data-rno='"+rno+"' data-replyer='"+replyer+"'> 답글  </div>\n" +
+                "    </div>\n" +
+                "    <div class='col-auto'>\n" +
+                "        <div class= 'h5 mb-0 text-gray-800 btn' id='rereplylistbtn' data-rno='"+rno+"' data-replyer='"+replyer+"'> 답글 보기</div>\n" +
+                "    </div>\n" +
+                "</div>\n";
+            rerepliesBody.html(str);
+
+
+        });
     })
 
 </script>

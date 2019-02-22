@@ -12,5 +12,5 @@ public interface ReReplyService {
 
     public int remove(Long rno);
 
-    public List<ReReplyVO> getList(Long bno);
+    public List<ReReplyVO> getList(Long parentRno);
 }
