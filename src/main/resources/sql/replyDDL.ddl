@@ -13,7 +13,7 @@ create sequence seq_reply;
 alter table tbl_reply add constraint pk_reply primary key (rno);
 
 alter table tbl_reply add constraint fk_reply_board
-foreign key (bno) references TBL_BOARD (bno);
+foreign key (bno) references TBL_BOARD (bno) on delete cascade;
 
 /*create index*/
 
@@ -37,7 +37,7 @@ create sequence seq_reReply;
 alter table tbl_reReply add constraint pk_reReply primary key (rno);
 
 alter table tbl_reReply add constraint fk_reReply_reply
-  foreign key (parentRno) references tbl_reply (rno);
+  foreign key (parentRno) references tbl_reply (rno) on delete cascade;
 
 alter table tbl_reReply add constraint fk_reReply_board
-  foreign key (bno) references tbl_board (bno);
+  foreign key (bno) references tbl_board (bno) on delete cascade;
