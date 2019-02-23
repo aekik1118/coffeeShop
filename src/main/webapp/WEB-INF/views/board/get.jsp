@@ -334,36 +334,6 @@
             });
         });
 
-
-
-     /*   replyBody.on("click","li", function (e) {
-            var rno = $(this).data("rno");
-            console.log(rno);
-            replyService.get(rno, function(reply) {
-                console.log("get success "+ reply.rno);
-                myModal.data("rno", reply.rno);
-                myModal.data("replyer",reply.replyer);
-                myModal.modal("show");
-            });
-
-        });*/
-
-        /*reply remove*/
-
-       /* modalReplyRemoveBtn.on("click", function (e) {
-            console.log("remove click!");
-            var rno = myModal.data("rno");
-            var replyer = myModal.data("replyer");
-            console.log(rno);
-            console.log(replyer);
-
-            replyService.remove(rno, replyer, function(result) {
-                alert(result);
-                myModal.modal("hide");
-                showList(-1);
-            })
-        });*/
-
        /*replyRemove*/
 
         var removeModal = $("#removeModal");
@@ -376,17 +346,27 @@
 
             removeModal.data("rno", rno);
             removeModal.data("replyer", replyer);
+            removeModal.data("isreply", true);
             removeModal.modal();
         });
 
         modalRemoveRereplyBtn.on("click",function (e) {
             var rno = removeModal.data("rno");
             var replyer = removeModal.data("replyer");
-            replyService.remove(rno, replyer, function (result) {
-               alert(result);
-               removeModal.modal("hide");
-               showList(-1);
-           });
+
+            if( removeModal.data("isreply")){
+                replyService.remove(rno, replyer, function (result) {
+                    alert(result);
+                    removeModal.modal("hide");
+                    showList(-1);
+                });
+            } else {
+                reReplyService.remove(rno, replyer, function (result) {
+                    alert(result);
+                    removeModal.modal("hide");
+                    showList(-1);
+                });
+            }
         });
         /*rereply modal*/
 
@@ -416,14 +396,6 @@
 
         /*rereply*/
 
-        /*var rereplyRegBtn = $("#rereplyregbtn");
-        var rereplyListBtn = $("#rereplylistbtn");
-
-        rereplyRegBtn.on("click",function (e) {
-            var rno = $(this).data("rno");
-            console.log(rno);
-        })
-*/
         replyBody.on("click","#rereplyregbtn", function (e) {
             var rno = $(this).data("rno");
             var replyer = $(this).data("replyer");
@@ -505,8 +477,14 @@
             rerepliesBody.html(str);
         });
 
-
-
+        replyBody.on("click", "#reReplyRemoveBtn",function (e) {
+            var rno = $(this).data("rno");
+            var replyer = $(this).data("replyer");
+            removeModal.data("rno", rno);
+            removeModal.data("replyer", replyer);
+            removeModal.data("isreply", false);
+            removeModal.modal();
+        });
     })
 
 </script>

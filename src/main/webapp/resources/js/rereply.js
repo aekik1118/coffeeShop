@@ -39,8 +39,28 @@ var reReplyService = (function() {
         })
     }
 
+    function remove(rno, replyer ,callback, error) {
+        $.ajax({
+            type : 'delete',
+            url : '/rereplies/' + rno,
+            data : JSON.stringify({rno:rno, replyer:replyer}),
+            contentType: "application/json; charset=utf-8",
+            success : function(deleteResult, status, xhr) {
+                if (callback) {
+                    callback(deleteResult);
+                }
+            },
+            error : function(xhr, status, er) {
+                if (error) {
+                    error(er);
+                }
+            }
+        });
+    }
+
     return {
         getList : getList,
-        add : add
+        add : add,
+        remove : remove
     };
 })();
