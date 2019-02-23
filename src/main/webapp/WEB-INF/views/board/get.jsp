@@ -132,6 +132,26 @@
     </div>
 </div>
 
+<div class="modal fade" id="removeModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="removeModalLabel">삭제 확인</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+               <h2>해당 댓글을 삭제하시겠습니까?</h2>
+            </div>
+            <div class="modal-footer">
+                <button id='modalRemoveRereplyBtn' class="btn btn-danger" type="button" data-dismiss="modal">삭제</button>
+                <button id='removeModalCloseBtn' class="btn btn-secondary" type="button" data-dismiss="modal">닫기</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <form id='operForm' action="/board/modify" method="get">
     <input type='hidden' id='bno' name='bno'
            value='<c:out value="${board.bno}" />'> <input
@@ -344,6 +364,30 @@
             })
         });*/
 
+       /*replyRemove*/
+
+        var removeModal = $("#removeModal");
+        var modalRemoveRereplyBtn = $("#modalRemoveRereplyBtn");
+
+
+        replyBody.on("click","#replyRemoveBtn",function (e) {
+            var rno = $(this).data("rno");
+            var replyer = $(this).data("replyer");
+
+            removeModal.data("rno", rno);
+            removeModal.data("replyer", replyer);
+            removeModal.modal();
+        });
+
+        modalRemoveRereplyBtn.on("click",function (e) {
+            var rno = removeModal.data("rno");
+            var replyer = removeModal.data("replyer");
+            replyService.remove(rno, replyer, function (result) {
+               alert(result);
+               removeModal.modal("hide");
+               showList(-1);
+           });
+        });
         /*rereply modal*/
 
         var myModal = $("#myModal");
@@ -394,7 +438,7 @@
 
         replyBody.on("click","#rereplylistbtn", function (e) {
             var rno = $(this).data("rno");
-            var replyer = $(this).data("replyer")
+            var replyer = $(this).data("replyer");
             var rerepliesBody = $(this).closest("ul");
             var str = "";
 
@@ -416,12 +460,13 @@
                         "                        <div class='card shadow h-100 py-2'>\n" +
                         "                            <div class='card-body reply-card-body' >\n" +
                         "                                <div class='row align-items-start'>\n" +
-                        "                                    <div class='col mr-lg-5'>\n" +
+                        "                                    <div class='col-10'>\n" +
                         "                                        <div class='text-xs font-weight-bold text-primary text-uppercase mb-1'>"+ list[i].replyer +"</div>\n" +
                         "                                        <div class='h5 mb-0 font-weight-bold text-gray-800'>"+list[i].reply+"</div>\n" +
                         "                                    </div>\n" +
-                        "                                    <div class='col-auto'>\n" +
+                        "                                    <div class='col-auto align-self-center'>\n" +
                         "                                        <div class='h5 mb-0 text-gray-800'>"+ replyService.displayTime(list[i].replyDate)+"</div>\n" +
+                        "                                        <div class='h5 mb-0 text-gray-800 btn' id=reReplyRemoveBtn data-rno='"+list[i].rno+"' data-replyer='"+list[i].replyer+"'> 삭제 </div>" +
                         "                                    </div>\n" +
                         "                                </div>\n" +
                         "                            </div>\n" +
