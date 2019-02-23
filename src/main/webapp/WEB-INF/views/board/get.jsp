@@ -62,7 +62,7 @@
             <ul>
                 <li class='row'>
                     <div class='col mb-4'>
-                        <div class='card border-left-primary shadow h-100 py-2'>
+                        <div class='card shadow h-100 py-2'>
                             <div class='card-body'>
                                 <form>
                                     <div class="form-group">
@@ -200,15 +200,16 @@
                         for (var i = 0, len = list.length || 0; i < len; i++) {
                             str += "<li>\n" +
                                 "                    <div class='col mb-4'>\n" +
-                                "                        <div class='card border-left-primary shadow h-100 py-2'>\n" +
+                                "                        <div class='card shadow h-100 py-2'>\n" +
                                 "                            <div class='card-body reply-card-body' >\n" +
-                                "                                <div class='row align-items-start'>\n" +
-                                "                                    <div class='col mr-lg-5'>\n" +
+                                "                                <div class='row align-items-start no-gutters'>\n" +
+                                "                                    <div class='col-10'>\n" +
                                 "                                        <div class='text-xs font-weight-bold text-primary text-uppercase mb-1'>"+ list[i].replyer +"</div>\n" +
                                 "                                        <div class='h5 mb-0 font-weight-bold text-gray-800'>"+list[i].reply+"</div>\n" +
                                 "                                    </div>\n" +
-                                "                                    <div class='col-auto'>\n" +
+                                "                                    <div class='col-auto align-self-center'>\n" +
                                 "                                        <div class='h5 mb-0 text-gray-800'>"+ replyService.displayTime(list[i].replyDate)+"</div>\n" +
+                                "                                        <div class='h5 mb-0 text-gray-800 btn' id=replyRemoveBtn data-rno='"+list[i].rno+"' data-replyer='"+list[i].replyer+"'> 삭제 </div>" +
                                 "                                    </div>\n" +
                                 "                                </div>\n" +
                                 "                            </div>\n" +
@@ -407,10 +408,12 @@
                     return;
                 }
 
+                str += "<div class='mt-4'></div>";
+
                 for(var i=0; i<list.length; i++){
                     str += "<li>\n" +
                         "                    <div class='col mb-4'>\n" +
-                        "                        <div class='card border-left-primary shadow h-100 py-2'>\n" +
+                        "                        <div class='card shadow h-100 py-2'>\n" +
                         "                            <div class='card-body reply-card-body' >\n" +
                         "                                <div class='row align-items-start'>\n" +
                         "                                    <div class='col mr-lg-5'>\n" +
