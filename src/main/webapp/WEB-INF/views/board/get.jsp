@@ -109,14 +109,23 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">댓글 설정</h5>
+                <h5 class="modal-title" id="exampleModalLabel">답글 달기</h5>
                 <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
             </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label>댓글 쓰기</label>
+                        <textarea class="form-control" rows="3" id='inputReReply'></textarea>
+                    </div>
+                    <input type="hidden" name='replyer' value='Replyer' readonly="readonly">
+                </form>
+            </div>
+
             <div class="modal-footer">
-                <button id='modalReplyRemoveBtn' class="btn btn-danger" type="button" data-dismiss="modal">삭제</button>
-                <button id='modalRegRereplyBtn' class="btn btn-primary" type="button" data-dismiss="modal">대댓글 등록</button>
+                <button id='modalRegRereplyBtn' class="btn btn-primary" type="button" data-dismiss="modal">등록</button>
                 <button id='modalCloseBtn' class="btn btn-secondary" type="button" data-dismiss="modal">닫기</button>
             </div>
         </div>
@@ -303,13 +312,6 @@
                 showList(-1);
             });
         });
-        
-        /*reply modal*/
-
-        var myModal = $("#myModal");
-        var modalReplyRemoveBtn = $("#modalReplyRemoveBtn");
-        var modalRegRereplyBtn = $("modalRegRereplyBtn");
-        var replyCardBody = $("reply-card-body");
 
 
 
@@ -327,7 +329,7 @@
 
         /*reply remove*/
 
-        modalReplyRemoveBtn.on("click", function (e) {
+       /* modalReplyRemoveBtn.on("click", function (e) {
             console.log("remove click!");
             var rno = myModal.data("rno");
             var replyer = myModal.data("replyer");
@@ -339,6 +341,32 @@
                 myModal.modal("hide");
                 showList(-1);
             })
+        });*/
+
+        /*rereply modal*/
+
+        var myModal = $("#myModal");
+        var modalRegRereplyBtn = $("#modalRegRereplyBtn");
+        var inputReReply = $("#inputReReply");
+        var replyCardBody = $("reply-card-body");
+
+        modalRegRereplyBtn.on("click",function (e) {
+            var rno = myModal.data("rno");
+            var replyer = myModal.data("replyer");
+            var reply = inputReReply.val();
+
+            var reReply = {
+                reply : reply,
+                replyer : replyer,
+                bno : bnoValue,
+                parentRno : rno
+            };
+
+            reReplyService.add(reReply,function (result) {
+                alert(result);
+                showList(-1);
+            })
+
         });
 
         /*rereply*/
@@ -353,7 +381,14 @@
 */
         replyBody.on("click","#rereplyregbtn", function (e) {
             var rno = $(this).data("rno");
+            var replyer = $(this).data("replyer");
+
             console.log(rno);
+            console.log(replyer);
+
+            myModal.data("rno", rno);
+            myModal.data("replyer",replyer);
+            myModal.modal("show");
         });
 
         replyBody.on("click","#rereplylistbtn", function (e) {
@@ -420,9 +455,10 @@
                 "    </div>\n" +
                 "</div>\n";
             rerepliesBody.html(str);
-
-
         });
+
+
+
     })
 
 </script>
