@@ -14,13 +14,13 @@
         DELETE FROM tbl_order WHERE ono = #{ono}
     </delete>
 
-    <insert id="insertAmount">
-        INSERT  INTO tbl_order (amount) values (#{aount}) where ono =  #{ono}
-    </insert>
+    <update id="insertAmount">
+        UPDATE tbl_order set amount = #{amount} where ono =  #{ono}
+    </update>
 
-    <insert id="insertTotal">
-        INSERT INTO tbl_order (total) values (#{total}) where ono = #{ono}
-    </insert>
+    <update id="insertTotal">
+        UPDATE tbl_order set total = #{total} where ono = #{ono}
+    </update>
 
     <select id="watingList" resultType="com.coffeeshop.domain.OrderVO">
         SELECT * FROM tbl_order where sold = 0
@@ -38,14 +38,14 @@
     <select id="getOnoCount" resultType="int">
         <![CDATA[
         SELECT count(ono) FROM tbl_order
-        where sold = 1 and TO_CHAR(odate,'yyyy-mm-dd') = TO_CHAR({xDate},'yyyy-mm-dd')
+        where sold = 1 and TO_CHAR(odate,'yyyy-mm-dd') = TO_CHAR(#{xDate},'yyyy-mm-dd')
         ]]>
     </select>
 
     <select id="getTotalSales" resultType="int">
         <![CDATA[
         SELECT sum(total) FROM tbl_order
-        where sold = 1 and TO_CHAR(odate,'yyyy-mm-dd') = TO_CHAR({xDate},'yyyy-mm-dd')
+        where sold = 1 and TO_CHAR(odate,'yyyy-mm-dd') = TO_CHAR(#{xDate},'yyyy-mm-dd')
         ]]>
     </select>
 

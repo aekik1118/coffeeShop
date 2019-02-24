@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -21,11 +23,45 @@ public class OrderMapperTests {
     private OrderMapper mapper;
 
     @Test
-    public void mapperTest(){
+    public void initTest(){
         log.info(mapper);
     }
 
     @Test
+    public void completeListTest(){
+        List<OrderVO> completeList = mapper.completeList();
+
+        completeList.forEach(OrderVO -> log.info(OrderVO));
+    }
+
+    @Test
+    public void getOnoCountTest(){
+        String testDate = "2019-02-01";
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            Date xDate = format.parse(testDate);
+            System.out.println(xDate);
+            int ret = mapper.getOnoCount(xDate);
+            System.out.println(ret);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void getTotalSalesTest(){
+        String testDate = "2019-02-01";
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            Date xDate = format.parse(testDate);
+            System.out.println(xDate);
+            int ret = mapper.getTotalSales(xDate);
+            System.out.println(ret);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+/*    @Test
     public void allTest() {
         List<OrderVO> orderVOList = mapper.watingList();
 
@@ -46,7 +82,7 @@ public class OrderMapperTests {
         for(OrderVO orderVO : mapper.watingList()) {
             log.info(orderVO.getOno() + ":" + orderVO.getCustomer());
         }
-    }
+    }*/
 
 
 }
