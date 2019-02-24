@@ -40,7 +40,7 @@ public class BoardController {
 //		log.info("list");
 //		model.addAttribute("list", service.getList());
 //	}
-
+//bbbbb
 	@GetMapping("/list")
 	public void list(Criteria cri, Model model) {
 		log.info("list");
