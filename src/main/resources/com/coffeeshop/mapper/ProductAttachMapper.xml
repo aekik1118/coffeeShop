@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.coffeeshop.mapper.ProductAttachMapper">
+    <insert id="insert">
+        INSERT INTO tbl_productAttach (uuid, uploadPath, fileName, productid)
+        VALUES (#{uuid}, #{uploadPath}, #{fileName}, #{productid})
+    </insert>
+
+    <delete id="delete">
+        DELETE FROM tbl_productAttach WHERE productid = #{productid}
+    </delete>
+
+    <select id="getAttach" resultType="com.coffeeshop.domain.ProductAttachVO">
+        SELECT * FROM tbl_productAttach WHERE uuid = #{uuid}
+    </select>
+</mapper>

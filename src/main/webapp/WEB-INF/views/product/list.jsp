@@ -33,8 +33,17 @@
                                         <h6 class="m-0 font-weight-bold text-primary"><c:out value="${product.productId}" /> </h6>
                                     </div>
                                     <div class="card-body">
-                                        <div class="text-center">
-                                            <img class="img-fluid px-3 px-sm-4 mt-3 mb-4" style="width: 25rem;" src="/resources/img/undraw_posting_photo.svg" alt="">
+                                        <div id="productImg" class="text-center">
+                                            <c:choose>
+                                                <c:when test="${product.attach eq null}">
+                                                    <img class="img-fluid px-3 px-sm-4 mt-3 mb-4" style="width: 25rem;" src="/resources/img/undraw_posting_photo.svg" alt="">
+                                                </c:when>
+
+                                                <c:otherwise>
+                                                    <img class="img-fluid px-3 px-sm-4 mt-3 mb-4" style="width: 25rem;" src="${product.attach.uploadPath + "/s_" + product.attach.uuid + "_" + product.attach.fileName}" alt="">
+                                                </c:otherwise>
+                                            </c:choose>
+
                                         </div>
                                         <c:out value="${product.explain}"/>
                                         <div>
@@ -56,18 +65,18 @@
 
         <!-- start pagination -->
         <div class="col-sm-12 col-md-7">
-            <div class="dataTables_paginate paging_simple_numbers">
+            <div class="col mr-2" align="center">
                 <ul class="pagination">
                     <c:if test="${pageMaker.prev }">
-                        <li class="paginate_button page-item previous disabled"><a href="${pageMaker.startPage -1 }">Previous</a></li>
+                        <li class="page-item previous paginate_button"><a class="page-link" href="${pageMaker.startPage -1 }">Previous</a></li>
                     </c:if>
 
                     <c:forEach var="num" begin="${pageMaker.startPage }" end="${pageMaker.endPage }">
-                        <li class="paginate_button page-item ${pageMaker.cri.pageNum == num ? 'active' : '' }" ><a href="${num }">${num }</a></li>
+                        <li class="page-item paginate_button ${pageMaker.cri.pageNum == num ? 'active' : '' }" ><a class="page-link" href="${num }">${num }</a></li>
                     </c:forEach>
 
                     <c:if test="${pageMaker.next }">
-                        <li class="paginate_button next"><a href="${pageMaker.endPage +1 }">Next</a></li>
+                        <li class="page-item paginate_button next"><a class=page-link" href="${pageMaker.endPage +1 }">Next</a></li>
                     </c:if>
                 </ul>
             </div>
@@ -115,6 +124,10 @@
                 </div>
             </div>
 
+            <div id="uploadDiv" class="form-group">
+                <%--<input type="file" name="uploadFile" multiple>--%>
+            </div>
+
             <div class="modal-footer">
 
             </div>
@@ -157,6 +170,9 @@
 
         $("#regBtn").on("click", function () {
 
+            var fileReg = "<input type='file' name='uploadFile' multiple>";
+            $("#uploadDiv").html(fileReg);
+
             var str = " <button id=\"registerBtn\" class=\"btn btn-primary btn-icon-split\">\n" +
                 "                    <span class=\"icon text-white-50\">\n" +
                 "                      <i class=\"fas fa-check\"></i>\n" +
@@ -180,15 +196,114 @@
                 myModal.modal("hide");
             }); // cancelBtn on click
 
-            $("#registerBtn").on("click", function () {
 
-                var product = {
-                    productId : modalInputProductId.val(),
-                    price : modalInputPrice.val(),
-                    ice : modalInputIce.val(),
-                    hot : modalInputHot.val(),
-                    explain : modalInputExplain.val()
-                };
+            var regex = new RegExp("(.*?)\.(exe|sh|zip|alz)$");
+            var maxSize = 5242880; //5MB
+
+            function checkExtension(fileName, fileSize) {
+
+                if(fileSize >= maxSize) {
+                    alert("파일 사이즈 초과!");
+                    return false;
+                }
+
+                if(regex.test(fileName)) {
+                    alert("해당 종류의 파일은 업로드 할 수 없습니다.");
+                    return false;
+                }
+
+                return true;
+            } // end checkExtension
+
+            var uuid;
+            var fileName;
+            var uploadPath;
+
+            $("#uploadDiv").on("change", "input", function () {
+                var formData = new FormData();
+                var inputFile = $("input[name='uploadFile']");
+                var files = inputFile[0].files;
+
+                for(var i = 0; i < files.length; i++) {
+
+                    if(!checkExtension(files[i].name, files[i].size)) return false;
+
+                    formData.append("uploadFile", files[i]);
+                }
+
+                $.ajax({
+                    url: '/productUpload',
+                    processData: false,
+                    contentType: false,
+                    data: formData,
+                    type: 'POST',
+                    dataType: 'json',
+                    success: function (obj, result) {
+                        console.log("upload : " + result);
+
+                        uuid = obj[0].uuid;
+                        fileName = obj[0].fileName;
+                        uploadPath = obj[0].uploadPath;
+
+                        var fileCallPath = encodeURIComponent(obj[0].uploadPath + "/s_" + obj[0].uuid + "_" + obj[0].fileName);
+
+                        var str = obj[0].fileName + " ";
+                        str += "<button id='productDelete' data-file=\'" + fileCallPath + "\'> Delete </button>";
+
+                        $("#uploadDiv").html(str);
+                    }
+                }); // end productUpload ajax
+            }); // uploadDiv input on change
+
+
+            $("#uploadDiv").on("click", "button", function () {
+               console.log("delete file");
+               var targetFile = $(this).data("file");
+               console.log(targetFile);
+
+               $.ajax({
+                   url : '/productFileDelete',
+                   data : {fileName : targetFile},
+                   dataType : 'text',
+                   type : 'post',
+                   success : function (result) {
+                       alert(result);
+                       $("#uploadDiv").html(fileReg);
+
+                       uuid = null;
+                       fileName = null;
+                       uploadPath = null;
+                   }
+               }); // delete ajax
+            }); // end uploadDiv button on click
+
+            $("#registerBtn").on("click", function (e) {
+
+                if(uuid != null) {
+                    var product = {
+                        productId : modalInputProductId.val(),
+                        price : modalInputPrice.val(),
+                        ice : modalInputIce.val(),
+                        hot : modalInputHot.val(),
+                        explain : modalInputExplain.val(),
+                        attach : {
+                            uuid : uuid,
+                            fileName : fileName,
+                            uploadPath : uploadPath,
+                            productid : modalInputProductId.val()
+                        }
+                    };
+                }
+                else {
+                    var product = {
+                        productId : modalInputProductId.val(),
+                        price : modalInputPrice.val(),
+                        ice : modalInputIce.val(),
+                        hot : modalInputHot.val(),
+                        explain : modalInputExplain.val(),
+                        attach : null
+                    };
+                }
 
                 productService.register(product, function (result) {
                     alert(result);
@@ -199,9 +314,8 @@
                     myModal.modal("hide");
                     location.reload();
                 });
+
             }); // end registerBtn on click
-
-
 
         }); // end regBtn on click
 
@@ -285,7 +399,7 @@
                 modalInputHot.removeAttr("checked");
                 modalInputProductId.removeAttr("readonly");
                 myModal.modal("hide");
-            }); // end cacelBtn on click
+            }); // end cancelBtn on click
 
         }); // end pd on click
 

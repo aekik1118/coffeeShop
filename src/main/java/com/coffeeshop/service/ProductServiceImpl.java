@@ -2,11 +2,13 @@ package com.coffeeshop.service;
 
 import com.coffeeshop.domain.Criteria;
 import com.coffeeshop.domain.ProductVO;
+import com.coffeeshop.mapper.ProductAttachMapper;
 import com.coffeeshop.mapper.ProductMapper;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -17,10 +19,20 @@ public class ProductServiceImpl implements ProductService {
     @Setter(onMethod_ = {@Autowired})
     private ProductMapper mapper;
 
+    @Setter(onMethod_ = {@Autowired})
+    private ProductAttachMapper attachMapper;
+
+    //@Transactional
     @Override
     public int register(ProductVO product) {
         log.info("regist product : " + product);
-        return mapper.register(product);
+        int regResult = mapper.register(product);
+        if(product.getAttach() != null) {
+            log.info("regist product attach : " + product.getAttach());
+            attachMapper.insert(product.getAttach());
+        }
+
+        return regResult;
     }
 
     @Override

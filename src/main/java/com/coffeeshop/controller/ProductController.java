@@ -7,7 +7,6 @@ import com.coffeeshop.service.ProductService;
 import lombok.AllArgsConstructor;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j;
-import oracle.jdbc.proxy.annotation.Post;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -41,6 +40,8 @@ public class ProductController {
         log.info("=========================");
         log.info("register : " + product);
         log.info("=========================");
+
+        if(product.getAttach() != null) log.info(product.getAttach());
 
         int regCount = service.register(product);
 
