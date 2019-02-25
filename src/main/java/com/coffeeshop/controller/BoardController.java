@@ -1,9 +1,13 @@
 package com.coffeeshop.controller;
 
+import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import com.coffeeshop.domain.BoardAttachVO;
 import com.coffeeshop.domain.BoardVO;
@@ -22,6 +26,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 
@@ -56,17 +61,50 @@ public class BoardController {
 	}
 
 	@PostMapping("/register")
-	public String register(BoardVO board, RedirectAttributes rttr) {
+	public String register(BoardVO board, RedirectAttributes rttr, MultipartFile[] uploadFile) {
 
-		log.info("==============");
+	    String uploadFolder = "C:\\upload\\boardAttach";
+
+		/*log.info("==============");
 		log.info("register: " + board);
 		if (board.getAttachList() != null) {
 			board.getAttachList().forEach(attach -> log.info(attach));
-		}
-		log.info("==============");
+		}*/
+
+		File uploadPath = new File(uploadFolder, getFolder());
+		log.info("upload path : "+ uploadPath);
+
+		if(!uploadPath.exists()){
+		    uploadPath.mkdirs();
+        }
+
+        for(MultipartFile file : uploadFile){
+            log.info("=================");
+            log.info("file Name : " + file.getOriginalFilename());
+
+            String uploadFileName = file.getOriginalFilename();
+
+            //IE
+            uploadFileName = uploadFileName.substring(uploadFileName.lastIndexOf("\\")+1);
+
+            UUID uuid = UUID.randomUUID();
+            uploadFileName = uuid.toString() + "_" + uploadFileName;
+
+            File saveFile = new File(uploadPath, uploadFileName);
+            try{
+                file.transferTo(saveFile);
+
+            }catch (Exception e){
+                log.error(e.getMessage());
+            }
+
+        }
 
 		service.register(board);
 		rttr.addFlashAttribute("result", board.getBno());
+
+
+
 		return "redirect:/board/list";
 	}
 
@@ -144,5 +182,16 @@ public class BoardController {
 			}
 		});
 	}
+
+    private String getFolder() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+        Date date = new Date();
+
+        String str = sdf.format(date);
+
+        return str.replace("-", File.separator);
+
+    }
 
 }
