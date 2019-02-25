@@ -34,8 +34,8 @@ public class StatisticsServiceImpl implements StatisticsService {
     @Override
     public List<StatisticsDTO> getStatisticsList(String startDate) {
 
-        StatisticsDTO statistics = new StatisticsDTO();
         List<StatisticsDTO> statisticsList = new ArrayList<>();
+
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 
         try {
@@ -45,10 +45,14 @@ public class StatisticsServiceImpl implements StatisticsService {
             cal.setTime(xDate);
             for(int i = 0; i < 15; i++ ) {
                 cal.add(Calendar.DATE, 1);
-                statistics.setOrderCnt(mapper.getOnoCount(cal.getTime()));
-                statistics.setProductCnt(orderedPMapper.allProductCount(cal.getTime()));
-                statistics.setTotalSales(mapper.getTotalSales(cal.getTime()));
-                statisticsList.add(statistics);
+                log.info(cal.getTime());
+                StatisticsDTO statisticsDTO = new StatisticsDTO();
+                statisticsDTO.setOrderCnt(mapper.getOnoCount(cal.getTime()));
+//                statisticsDTO.setProductCnt(orderedPMapper.allProductCount(cal.getTime()));
+                statisticsDTO.setTotalSales(mapper.getTotalSales(cal.getTime()));
+                log.info(statisticsDTO);
+                statisticsList.add(statisticsDTO);
+                log.info(statisticsList);
             }
 
         }catch (Exception e){

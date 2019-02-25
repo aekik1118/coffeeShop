@@ -2,6 +2,7 @@ package com.coffeeshop.service;
 
 import com.coffeeshop.config.RootConfig;
 import com.coffeeshop.domain.OrderVO;
+import com.coffeeshop.domain.StatisticsDTO;
 import lombok.AllArgsConstructor;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j;
@@ -13,6 +14,9 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -24,9 +28,17 @@ public class StatisticsServiceTests {
     private StatisticsService service;
 
     @Test
-    public void getCompleteTests(){
+    public void getCompleteTests() {
         List<OrderVO> completeList = service.getComplete();
 
         completeList.forEach(OrderVO -> log.info(OrderVO));
+    }
+
+    @Test
+    public void getStatisticsListTest() {
+        List<StatisticsDTO> list = service.getStatisticsList("2019-01-25");
+
+        list.forEach(StatisticsDTO -> log.info(StatisticsDTO));
+
     }
 }
