@@ -1,6 +1,9 @@
 package com.coffeeshop.service;
 
 import java.net.URLEncoder;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 import com.coffeeshop.domain.BoardAttachVO;
@@ -83,23 +86,15 @@ public class BoardServiceImpl implements BoardService {
 		return modifyResult;
 	}
 
-	//@Transactional
+	@Transactional
 	@Override
 	public boolean remove(Long bno) {
 		log.info("remove.........." + bno);
-		
-		//attachMapper.deleteAll(bno);
-		
+		deleteFiles(attachMapper.findByBno(bno));
+		attachMapper.deleteAll(bno);
 		return mapper.delete(bno)==1;
 	}
 
-//	@Override
-//	public List<BoardVO> getList() {
-//		log.info("getList........");
-//		return mapper.getList();
-//		
-//	}
-	
 	@Override
 	public List<BoardVO> getList(Criteria cri) {
 		log.info("getList With criteria........");
@@ -118,5 +113,22 @@ public class BoardServiceImpl implements BoardService {
 		log.info("get Attach list by bno"+bno);
 		return attachMapper.findByBno(bno);
 	}
-	
+
+	private void deleteFiles(List<BoardAttachVO> attachList) {
+
+		if(attachList == null || attachList.size() == 0) {
+			return;
+		}
+		log.info("delete attach files.............");
+		log.info(attachList);
+
+		attachList.forEach(attach ->{
+			try {
+				Path file = Paths.get(attach.getUploadPath()+"\\"+attach.getUuid()+"_"+attach.getFileName());
+				Files.deleteIfExists(file);
+			}catch(Exception e) {
+				log.error("delete file error"+ e.getMessage());
+			}
+		});
+	}
 }
