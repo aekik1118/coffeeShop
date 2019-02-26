@@ -5,6 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -78,21 +79,32 @@ public class BoardController {
 		    uploadPath.mkdirs();
         }
 
+		List<BoardAttachVO> attachVOList = new ArrayList<>();
+
         for(MultipartFile file : uploadFile){
             log.info("=================");
             log.info("file Name : " + file.getOriginalFilename());
 
-            String uploadFileName = file.getOriginalFilename();
+            BoardAttachVO boardAttachVO = new BoardAttachVO();
+
+            String uploadOriginFileName = file.getOriginalFilename();
 
             //IE
-            uploadFileName = uploadFileName.substring(uploadFileName.lastIndexOf("\\")+1);
+            uploadOriginFileName = uploadOriginFileName.substring(uploadOriginFileName.lastIndexOf("\\")+1);
 
             UUID uuid = UUID.randomUUID();
-            uploadFileName = uuid.toString() + "_" + uploadFileName;
+            String uploadFileName = uuid.toString() + "_" + uploadOriginFileName;
 
             File saveFile = new File(uploadPath, uploadFileName);
             try{
                 file.transferTo(saveFile);
+
+                boardAttachVO.setFileName(uploadOriginFileName);
+                boardAttachVO.setUploadPath(uploadPath.toString());
+                boardAttachVO.setFileType(true);
+                boardAttachVO.setUuid(uuid.toString());
+
+                attachVOList.add(boardAttachVO);
 
             }catch (Exception e){
                 log.error(e.getMessage());
@@ -100,6 +112,7 @@ public class BoardController {
 
         }
 
+        board.setAttachList(attachVOList);
 		service.register(board);
 		rttr.addFlashAttribute("result", board.getBno());
 

@@ -5,21 +5,21 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="com.coffeeshop.mapper.BoardAttachMapper">
 
 	<insert id="insert">
-		INSERT INTO tbl_attach (uuid, uploadpath, filename, filetype, bno)
+		INSERT INTO tbl_board_attach (uuid, uploadpath, filename, filetype, bno)
 		VALUES (#{uuid}, #{uploadPath}, #{fileName}, #{fileType}, #{bno})
 	</insert>
 
 	<delete id="delete">
-		DELETE FROM tbl_attach where uuid = #{uuid}
+		DELETE FROM tbl_board_attach where uuid = #{uuid}
 	</delete>
 
 	<select id="findByBno"
 		resultType="com.coffeeshop.domain.BoardAttachVO">
-		SELECT * FROM tbl_attach WHERE bno = #{bno}
+		SELECT * FROM tbl_board_attach WHERE bno = #{bno}
 	</select>
 
     <delete id="deleteAll">
-        DELETE tbl_attach WHERE bno = #{bno}
+        DELETE tbl_board_attach WHERE bno = #{bno}
     </delete>
 
 </mapper>
