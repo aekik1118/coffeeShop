@@ -1,6 +1,8 @@
 package com.coffeeshop.controller;
 
 import java.io.File;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -15,18 +17,16 @@ import com.coffeeshop.domain.BoardVO;
 import com.coffeeshop.domain.Criteria;
 import com.coffeeshop.domain.PageDTO;
 import com.coffeeshop.service.BoardService;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -196,7 +196,53 @@ public class BoardController {
 		});
 	}
 
-    private String getFolder() {
+	@GetMapping(value = "/download", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+	@ResponseBody
+	public ResponseEntity<Resource> downloadFile(@RequestHeader("User-Agent")String userAgent, String fileName){
+
+		log.info("download file: " + fileName);
+
+		Resource resource = new FileSystemResource(fileName);
+
+		if(resource.exists() == false) {
+			log.info("not found");
+			return new ResponseEntity<Resource>(HttpStatus.NOT_FOUND);
+		}
+
+		log.info("resource: " + resource);
+
+		String resourceName = resource.getFilename();
+		String resourceOriginalName = resourceName.substring(resourceName.indexOf("_")+1);
+
+		HttpHeaders headers = new HttpHeaders();
+
+		try {
+
+			String downloadName = null;
+
+			if(userAgent.contains("Trident")) {
+				log.info("IE browser");
+				downloadName = URLEncoder.encode(resourceOriginalName, "UTF-8").replaceAll("\\+"," ");
+
+			} else if(userAgent.contains("Edge")) {
+				log.info("Edge browser");
+				downloadName = URLEncoder.encode(resourceOriginalName, "UTF-8");
+			}else {
+				log.info("Chrome browser");
+				downloadName = new String(resourceOriginalName.getBytes("UTF-8"),"ISO-8859-1");
+			}
+
+			headers.add("Content-Disposition", "attachment; filename=" + downloadName);
+		} catch(UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+
+		return new ResponseEntity<Resource>(resource, headers, HttpStatus.OK);
+
+	}
+
+
+	private String getFolder() {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
         Date date = new Date();

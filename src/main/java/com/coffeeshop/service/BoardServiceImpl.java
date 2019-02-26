@@ -1,5 +1,6 @@
 package com.coffeeshop.service;
 
+import java.net.URLEncoder;
 import java.util.List;
 
 import com.coffeeshop.domain.BoardAttachVO;
@@ -47,7 +48,21 @@ public class BoardServiceImpl implements BoardService {
 	@Override
 	public BoardVO get(Long bno) {
 		log.info("get........." + bno);
-		return mapper.read(bno);
+		BoardVO boardVO = mapper.read(bno);
+		boardVO.setAttachList(attachMapper.findByBno(boardVO.getBno()));
+
+		if(boardVO.getAttachList() != null){
+			boardVO.getAttachList().forEach(boardAttachVO -> {
+				try{
+					String encodeURI = URLEncoder.encode( boardAttachVO.getUploadPath() + "\\" + boardAttachVO.getUuid() + "_" + boardAttachVO.getFileName(),"UTF-8");
+					boardAttachVO.setFileDownloadURI(encodeURI);
+				}catch (Exception e){
+					e.printStackTrace();
+				}
+			});
+		}
+
+		return boardVO;
 	}
 
 	@Transactional

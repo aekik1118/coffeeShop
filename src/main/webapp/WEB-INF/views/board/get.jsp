@@ -45,6 +45,27 @@
         </div>
     </div>
 
+    <%--upload file--%>
+
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <div class="row no-gutters align-items-start">
+                <div class="col mr-4">
+                    <h6 class="m-0 font-weight-bold text-primary">첨부파일</h6>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <ul>
+                <c:forEach items="${board.attachList}" var="attach">
+                    <li>
+                        <a href="/board/download?fileName=<c:out value="${attach.fileDownloadURI}"/>"> <c:out value="${attach.fileName}"/> </a>
+                    </li>
+                </c:forEach>
+            </ul>
+        </div>
+    </div>
+
     <!-- reply -->
 
     <div class="card shadow mb-4">
