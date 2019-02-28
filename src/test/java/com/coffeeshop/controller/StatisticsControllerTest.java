@@ -37,4 +37,13 @@ public class StatisticsControllerTest {
         log.info(
                 mockMvc.perform(MockMvcRequestBuilders.get("/statistics/chart")).andReturn().getModelAndView().getModelMap());
     }
+
+    @Test
+    public void testPostChart() throws Exception {
+        String resultPage = mockMvc
+                .perform(MockMvcRequestBuilders.post("/statistics/chart").param("startDate", "2019-01-25"))
+                .andReturn().getModelAndView().getViewName();
+
+        log.info(resultPage);
+    }
 }

@@ -19,15 +19,17 @@ public class StatisticsController {
     private StatisticsService service;
 
     @GetMapping("/chart")
-    public @ResponseBody List<StatisticsDTO> chart(){
-        log.info("chart(get)...........");
-        return service.getStatisticsList("2019-01-25");
+    public void chart() {
+
     }
 
     @PostMapping("/chart")
-    public @ResponseBody List<StatisticsDTO> chart(@RequestParam("startDate") String startDate){
+    public void chart(@RequestParam("startDate") String startDate, Model model){
 
         log.info("chart(post)..........");
-        return service.getStatisticsList(startDate);
+        model.addAttribute("startDate",startDate);
+        model.addAttribute("list", service.getStatisticsList(startDate));
+        log.info(startDate);
+        log.info(model.toString());
     }
 }

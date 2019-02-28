@@ -45,14 +45,12 @@ public class StatisticsServiceImpl implements StatisticsService {
             cal.setTime(xDate);
             for(int i = 0; i < 15; i++ ) {
                 cal.add(Calendar.DATE, 1);
-                log.info(cal.getTime());
                 StatisticsDTO statisticsDTO = new StatisticsDTO();
                 statisticsDTO.setOrderCnt(mapper.getOnoCount(cal.getTime()));
 //                statisticsDTO.setProductCnt(orderedPMapper.allProductCount(cal.getTime()));
                 statisticsDTO.setTotalSales(mapper.getTotalSales(cal.getTime()));
-                log.info(statisticsDTO);
+                statisticsDTO.setStartDate(cal.getTime());
                 statisticsList.add(statisticsDTO);
-                log.info(statisticsList);
             }
 
         }catch (Exception e){
