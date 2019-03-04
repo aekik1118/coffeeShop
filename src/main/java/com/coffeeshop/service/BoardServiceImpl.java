@@ -70,19 +70,25 @@ public class BoardServiceImpl implements BoardService {
 
 	@Transactional
 	@Override
-	public boolean modify(BoardVO board) {
+	public boolean modify(BoardVO board, List<BoardAttachVO> addAttachVOList) {
 		log.info("modify.." + board);
-		
-		//attachMapper.deleteAll(board.getBno());
-		boolean modifyResult = mapper.update(board) == 1;
-		
-		/*if(modifyResult && board.getAttachList() != null  && board.getAttachList().size() > 0) {
-			board.getAttachList().forEach(attach->{
+
+	/*	if(board.getAttachList() != null && board.getAttachList().size() > 0){
+			deleteFiles(attachMapper.findByBno(board.getBno()));
+			attachMapper.deleteAll(board.getBno());
+
+			board.getAttachList().forEach(attach ->{
 				attach.setBno(board.getBno());
 				attachMapper.insert(attach);
 			});
 		}*/
+
+	    addAttachVOList.forEach(boardAttachVO -> {
+	        boardAttachVO.setBno(board.getBno());
+	        attachMapper.insert(boardAttachVO);
+        });
 		
+		boolean modifyResult = mapper.update(board) == 1;
 		return modifyResult;
 	}
 

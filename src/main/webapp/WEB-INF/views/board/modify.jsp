@@ -16,7 +16,7 @@
             <h6 class="m-0 font-weight-bold text-primary"><c:out value="${board.bno}"/>. <c:out value="${board.title}"/> 수정</h6>
         </div>
         <div class="card-body">
-            <form role="form" action="/board/modify" method="post">
+            <form role="form" action="/board/modify" method="post" enctype="multipart/form-data">
                 <div class="form-group">
                     <label>글제목</label>
                     <input type="text" class="form-control" name="title"
@@ -31,6 +31,22 @@
                 <div class="form-group">
                     <label>작성자</label>
                     <input type="text" class="form-control" name="writer" value='<c:out value="${board.writer}" />' readonly="readonly" >
+                </div>
+
+                <div class="row">
+                    <label>첨부파일 삭제</label>
+                    <ul>
+                        <c:forEach items="${board.attachList}" var="attach">
+                            <li>
+                                <c:out value="${attach.fileName}"/>
+                            </li>
+                        </c:forEach>
+                    </ul>
+                </div>
+
+                <div class="form-group">
+                    <label>첨부파일 추가</label>
+                    <input type="file" class="form-control" name="uploadFile" multiple>
                 </div>
 
                 <div class="row">
@@ -83,7 +99,7 @@
             } else if (operation === 'modify') {
                 console.log("submit clicked");
 
-                var str = "";
+                /*var str = "";
                 $(".uploadResult ul li").each(function (i, obj) {
                     var jobj = $(obj);
                     console.dir(jobj);
@@ -94,7 +110,7 @@
                     str += "<input type='hidden' name='attachList[" + i + "].fileType' value = '" + jobj.data("type") + "'>";
 
                 });
-                formObj.append(str).submit();
+                formObj.append(str).submit();*/
             }
             formObj.submit();
         });

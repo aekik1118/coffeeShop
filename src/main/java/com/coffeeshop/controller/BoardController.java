@@ -58,75 +58,36 @@ public class BoardController {
 	@PostMapping("/register")
 	public String register(BoardVO board, RedirectAttributes rttr, MultipartFile[] uploadFile) {
 
-	    String uploadFolder = "C:\\upload\\boardAttach";
-
-		/*log.info("==============");
-		log.info("register: " + board);
-		if (board.getAttachList() != null) {
-			board.getAttachList().forEach(attach -> log.info(attach));
-		}*/
-
-		File uploadPath = new File(uploadFolder, getFolder());
-		log.info("upload path : "+ uploadPath);
-
-		if(!uploadPath.exists()){
-		    uploadPath.mkdirs();
-        }
-
-		List<BoardAttachVO> attachVOList = new ArrayList<>();
-
-        for(MultipartFile file : uploadFile){
-            log.info("=================");
-            log.info("file Name : " + file.getOriginalFilename());
-
-            BoardAttachVO boardAttachVO = new BoardAttachVO();
-
-            String uploadOriginFileName = file.getOriginalFilename();
-
-            //IE
-            uploadOriginFileName = uploadOriginFileName.substring(uploadOriginFileName.lastIndexOf("\\")+1);
-
-            UUID uuid = UUID.randomUUID();
-            String uploadFileName = uuid.toString() + "_" + uploadOriginFileName;
-
-            File saveFile = new File(uploadPath, uploadFileName);
-            try{
-                file.transferTo(saveFile);
-
-                boardAttachVO.setFileName(uploadOriginFileName);
-                boardAttachVO.setUploadPath(uploadPath.toString());
-                boardAttachVO.setFileType(true);
-                boardAttachVO.setUuid(uuid.toString());
-
-                attachVOList.add(boardAttachVO);
-
-            }catch (Exception e){
-                log.error(e.getMessage());
-            }
-
-        }
-
+		List<BoardAttachVO> attachVOList = getBoardAttachListByMultipartFiles(uploadFile);
         board.setAttachList(attachVOList);
+
 		service.register(board);
 		rttr.addFlashAttribute("result", board.getBno());
-
-
 
 		return "redirect:/board/list";
 	}
 
-	@GetMapping({ "/get", "/modify" })
+	@GetMapping("/get")
 	public void get(@RequestParam("bno") Long bno, Model model, @ModelAttribute("cri") Criteria cri) {
 		log.info("/get or modify");
-		model.addAttribute("board", service.get(bno));
+		BoardVO boardVO = service.get(bno);
+		model.addAttribute("board", boardVO);
 	}
 
+	@GetMapping("/modify")
+	public void modify(@RequestParam("bno") Long bno, Model model, @ModelAttribute("cri") Criteria cri) {
+		log.info("/get or modify");
+		BoardVO boardVO = service.get(bno);
+		model.addAttribute("board", boardVO);
+	}
 
 	@PostMapping("/modify")
-	public String modify(BoardVO board, @ModelAttribute("cri") Criteria cri, RedirectAttributes rttr) {
+	public String modify(BoardVO board, @ModelAttribute("cri") Criteria cri, RedirectAttributes rttr, MultipartFile[] uploadFile) {
 		log.info("modify: " + board);
 
-		if (service.modify(board)) {
+        List<BoardAttachVO> addAttachVOList = getBoardAttachListByMultipartFiles(uploadFile);
+
+		if (service.modify(board, addAttachVOList)) {
 			rttr.addFlashAttribute("result", "success");
 		}
 
@@ -212,5 +173,51 @@ public class BoardController {
         return str.replace("-", File.separator);
 
     }
+
+    private List<BoardAttachVO> getBoardAttachListByMultipartFiles(MultipartFile[] uploadFile){
+
+		String uploadFolder = "C:\\upload\\boardAttach";
+
+		File uploadPath = new File(uploadFolder, getFolder());
+		log.info("upload path : "+ uploadPath);
+
+		if(!uploadPath.exists()){
+			uploadPath.mkdirs();
+		}
+
+		List<BoardAttachVO> attachVOList = new ArrayList<>();
+
+		for(MultipartFile file : uploadFile){
+			log.info("=================");
+			log.info("file Name : " + file.getOriginalFilename());
+
+			BoardAttachVO boardAttachVO = new BoardAttachVO();
+
+			String uploadOriginFileName = file.getOriginalFilename();
+
+			//IE
+			uploadOriginFileName = uploadOriginFileName.substring(uploadOriginFileName.lastIndexOf("\\")+1);
+
+			UUID uuid = UUID.randomUUID();
+			String uploadFileName = uuid.toString() + "_" + uploadOriginFileName;
+
+			File saveFile = new File(uploadPath, uploadFileName);
+			try{
+				file.transferTo(saveFile);
+
+				boardAttachVO.setFileName(uploadOriginFileName);
+				boardAttachVO.setUploadPath(uploadPath.toString());
+				boardAttachVO.setFileType(true);
+				boardAttachVO.setUuid(uuid.toString());
+
+				attachVOList.add(boardAttachVO);
+
+			}catch (Exception e){
+				log.error(e.getMessage());
+			}
+
+		}
+		return attachVOList;
+	}
 
 }
