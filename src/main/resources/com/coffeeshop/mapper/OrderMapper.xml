@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.coffeeshop.mapper.OrderMapper">
+
+    <insert id="insert">
+    INSERT INTO tbl_order (ono, customer)
+	values (seq_order.nextval, #{customer})
+	</insert>
+
+    <delete id="delete">
+        DELETE FROM tbl_order WHERE ono = #{ono}
+    </delete>
+
+    <update id="insertAmount">
+        UPDATE tbl_order set amount = #{amount} where ono =  #{ono}
+    </update>
+
+    <update id="insertTotal">
+        UPDATE tbl_order set total = #{total} where ono = #{ono}
+    </update>
+
+    <select id="watingList" resultType="com.coffeeshop.domain.OrderVO">
+        SELECT * FROM tbl_order where sold = 0
+    </select>
+
+    <update id="setSold">
+        update tbl_order set sold = 1, manager = {manager}, odate = sysdate
+        WHERE customer = #{customer}
+    </update>
+
+    <select id="completeList" resultType="com.coffeeshop.domain.OrderVO">
+        SELECT * FROM tbl_order where sold = 1
+    </select>
+
+    <select id="getOnoCount" resultType="int">
+        <![CDATA[
+        SELECT count(ono) FROM tbl_order
+        where sold = 1 and TO_CHAR(odate,'yyyy-mm-dd') = TO_CHAR(#{xDate},'yyyy-mm-dd')
+        ]]>
+    </select>
+
+    <select id="getTotalSales" resultType="int">
+        <![CDATA[
+        SELECT sum(total) FROM tbl_order
+        where sold = 1 and TO_CHAR(odate,'yyyy-mm-dd') = TO_CHAR(#{xDate},'yyyy-mm-dd')
+        ]]>
+    </select>
+
+</mapper>

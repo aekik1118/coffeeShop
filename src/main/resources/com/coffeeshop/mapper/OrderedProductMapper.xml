@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.coffeeshop.mapper.OrderedProductMapper">
+
+    <insert id="insert">
+    INSERT INTO tbl_orderedProduct (opno, ono, product, price, count)
+	values (seq_orderedProduct.nextval, #{ono}, #{product}, #{price}, #{count})
+	</insert>
+
+    <delete id="delete">
+        DELETE FROM tbl_orderedProduct WHERE opno = #{opno}
+    </delete>
+
+    <select id="select" resultType="com.coffeeshop.domain.OrderedProductVO">
+		SELECT * FROM tbl_orderedProduct WHERE ono = #{ono}
+	</select>
+
+    <delete id="cancle">
+        DELETE from tbl_orderedProduct where ono = #{ono}
+    </delete>
+
+    <select id="allProductCount" resultType="int">
+        <![CDATA[
+        SELECT sum(count) FROM tbl_orderedProduct
+        where TO_CHAR(opdate,'yyyy-mm-dd') = TO_CHAR(#{xDate},'yyyy-mm-dd')
+        ]]>
+    </select>
+
+    <select id="singleProductCount" resultType="int">
+        <![CDATA[
+        SELECT count(opno)*count(count) FROM tbl_orderedProduct
+        WHERE product = #{product}
+        and TO_CHAR(opdate,'yyyy-mm-dd') = TO_CHAR(#{xDate},'yyyy-mm-dd')
+        ]]>
+    </select>
+</mapper>
