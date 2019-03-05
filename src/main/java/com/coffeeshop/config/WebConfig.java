@@ -1,6 +1,12 @@
 package com.coffeeshop.config;
 
+import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
+
+import javax.servlet.Filter;
+import javax.servlet.MultipartConfigElement;
+import javax.servlet.ServletRegistration;
+import javax.servlet.annotation.MultipartConfig;
 
 public class WebConfig extends AbstractAnnotationConfigDispatcherServletInitializer {
     @Override
@@ -16,5 +22,21 @@ public class WebConfig extends AbstractAnnotationConfigDispatcherServletInitiali
         return new String[]{"/"};
     }
 
+    @Override
+    protected Filter[] getServletFilters() {
 
+        CharacterEncodingFilter characterEncodingFilter = new CharacterEncodingFilter();
+        characterEncodingFilter.setEncoding("UTF-8");
+        characterEncodingFilter.setForceEncoding(true);
+
+        return new Filter[] {characterEncodingFilter};
+    }
+
+    @Override
+    protected void customizeRegistration(ServletRegistration.Dynamic registration) {
+
+        registration.setInitParameter("throwExceptionIfNoHandlerFound","true");
+        MultipartConfigElement multipartConfigElement = new MultipartConfigElement("C:\\upload\\temp",1024*1024*20,1024*1024*40,1024*1024*20);
+        registration.setMultipartConfig(multipartConfigElement);
+    }
 }

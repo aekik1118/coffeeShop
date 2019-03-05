@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.coffeeshop.mapper.ReReplyMapper">
+    <insert id="insert">
+		<selectKey keyProperty="rno" order="BEFORE"
+				   resultType="long">
+			SELECT seq_reReply.nextval from dual
+		</selectKey>
+		INSERT INTO tbl_reReply (rno, bno, reply, replyer, parentRno)
+		VALUES (#{rno}, #{bno}, #{reply}, #{replyer} , #{parentRno})
+	</insert>
+
+	<select id="read" resultType="com.coffeeshop.domain.ReReplyVO">
+		SELECT * FROM tbl_reReply WHERE rno =
+		#{rno}
+	</select>
+
+	<delete id="delete">
+		DELETE FROM tbl_reReply WHERE rno = #{rno}
+	</delete>
+
+	<select id="getList" resultType="com.coffeeshop.domain.ReReplyVO">
+		SELECT * FROM tbl_Rereply WHERE parentRno = #{parentRno}
+	</select>
+
+</mapper>
