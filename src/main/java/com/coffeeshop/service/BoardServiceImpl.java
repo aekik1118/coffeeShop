@@ -34,12 +34,6 @@ public class BoardServiceImpl implements BoardService {
 	@Override
 	public void register(BoardVO board) {
 		log.info("register.." + board);
-
-		if(board.getTitle() == null || board.getContent() == null || board.getWriter() == null || board.getWriter().length() == 0 || board.getContent().length() == 0 ||board.getTitle().length() == 0 ){
-			log.info("null");
-			return;
-		}
-
 		mapper.insertSelectKey(board);
 		
 		if(board.getAttachList() == null || board.getAttachList().size() <= 0) {

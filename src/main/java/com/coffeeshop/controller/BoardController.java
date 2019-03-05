@@ -60,12 +60,7 @@ public class BoardController {
 	@PostMapping("/register")
 	public String register(BoardVO board, RedirectAttributes rttr, MultipartFile[] uploadFile) {
 
-		List<BoardAttachVO> attachVOList = null;
-		log.info(uploadFile[0].isEmpty());
-		if(!uploadFile[0].isEmpty()){
-			attachVOList = getBoardAttachListByMultipartFiles(uploadFile);
-		}
-
+		List<BoardAttachVO> attachVOList = getBoardAttachListByMultipartFiles(uploadFile);
         board.setAttachList(attachVOList);
 
 		service.register(board);
