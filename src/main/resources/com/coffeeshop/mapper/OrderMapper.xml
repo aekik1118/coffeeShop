@@ -49,4 +49,9 @@
         ]]>
     </select>
 
+    <select id="getDate" resultType="date">
+        SELECT odate FROM tbl_order
+        WHERE TO_CHAR(odate,'yyyy-mm-dd') = TO_CHAR(#{xDate},'yyyy-mm-dd')
+    </select>
+
 </mapper>

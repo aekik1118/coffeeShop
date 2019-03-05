@@ -50,7 +50,7 @@ public class OrderMapperTests {
 
     @Test
     public void getTotalSalesTest(){
-        String testDate = "2019-02-01";
+        String testDate = "2019-03-01";
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         try {
             Date xDate = format.parse(testDate);

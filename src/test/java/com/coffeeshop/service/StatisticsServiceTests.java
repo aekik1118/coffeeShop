@@ -36,7 +36,7 @@ public class StatisticsServiceTests {
 
     @Test
     public void getStatisticsListTest() {
-        List<StatisticsDTO> list = service.getStatisticsList("2019-01-25");
+        List<StatisticsDTO> list = service.getStatisticsList("2019-03-01", 15);
 
         list.forEach(StatisticsDTO -> log.info(StatisticsDTO));
 

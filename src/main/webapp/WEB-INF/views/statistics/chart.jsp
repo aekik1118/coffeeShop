@@ -130,7 +130,7 @@
 
             }
 
-            window.onload = function() {
+            /*window.onload = function() {
 
                 var chart = new CanvasJS.Chart("chartContainer", {
                     animationEnabled: true,
@@ -145,17 +145,17 @@
                         type: "column",
                         yValueFormatString: "#,##0\"",
                         dataPoints:[
-                           <c:forEach items="${list}" var="statistics" varStatus="state">
+                          <%-- <c:forEach items="${list}" var="statistics" varStatus="state">
                             { label: <c:out value="${statistics.startDate}" />,
                                 y: <c:out value="${statistics.totalSales}" /> }
                             <c:if test="${state.last eq false}">,</c:if>
-                            </c:forEach>
+                            </c:forEach> --%>
                         ]
                     }]
                 });
                 chart.render();
 
-            }
+            }*/
        </script>
         <div id="chartContainer" style="height: 300px; width: 100%;"></div>
         <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>

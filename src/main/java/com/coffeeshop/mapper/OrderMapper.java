@@ -16,4 +16,5 @@ public interface OrderMapper {
     public List<OrderVO> completeList();
     public int getOnoCount (Date xdate);
     public int getTotalSales(Date xdate);
+    public Date getDate(Date xdate);
 }

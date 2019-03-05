@@ -23,6 +23,11 @@ public class StatisticsController {
 
     }
 
+    @GetMapping("/doA")
+    public void doA() {
+        log.info("doA");
+    }
+
     @PostMapping("/chart")
     public void chart(@RequestParam("startDate") String startDate, @RequestParam("term") int term, Model model){
 
