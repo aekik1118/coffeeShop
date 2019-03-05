@@ -32,13 +32,13 @@
                     <label>작성자</label>
                     <input type="text" class="form-control" name="writer" value='<c:out value="${board.writer}" />' readonly="readonly" >
                 </div>
-
                 <div class="row">
                     <label>첨부파일 삭제</label>
-                    <ul>
+                    <ul id="removeAttachList">
                         <c:forEach items="${board.attachList}" var="attach">
                             <li>
                                 <c:out value="${attach.fileName}"/>
+                                <button class="btn btn-danger" data-oper="remove" data-uuid="<c:out value="${attach.uuid}"/>" data-filename="<c:out value="${attach.fileName}"/>">파일 삭제</button>
                             </li>
                         </c:forEach>
                     </ul>
@@ -49,15 +49,15 @@
                     <input type="file" class="form-control" name="uploadFile" multiple>
                 </div>
 
-                <div class="row">
+                <div class="row" id="modifyButtons">
                     <div class="col-xl-1 col-md-6 mb-4">
-                        <button class="btn btn-primary btn-block" data-oper='modify'>수정</button>
+                        <button class="btn btn-primary btn-block" data-oper='modify'>글 수정</button>
                     </div>
                     <div class="col-xl-1 col-md-6 mb-4">
-                        <button class="btn btn-danger btn-block" data-oper='remove'>삭제</button>
+                        <button class="btn btn-danger btn-block" data-oper='remove'>글 삭제</button>
                     </div>
                     <div class="col-xl-1 col-md-6 mb-4">
-                        <button class="btn btn-primary btn-block" data-oper='list'>글목록</button>
+                        <button class="btn btn-primary btn-block" data-oper='list'>글 목록</button>
                     </div>
                 </div>
 
@@ -72,13 +72,49 @@
 
     $(document).ready(function() {
         var formObj = $("form");
+        var removeAttachList = $("#removeAttachList");
+        var removeUuidList = new Array();
 
-        $('button').on("click", function (e) {
+        removeAttachList.on("click","li button",function (e) {
+            e.preventDefault();
+            var operation = $(this).data("oper");
+            var liObj = $(this).closest("li");
+            var filename = $(this).data("filename");
+            var uuid =  $(this).data("uuid");
+
+            var str = "";
+
+            console.log( $(this).data("filename"));
+            console.log( $(this).data("uuid"));
+            console.log(operation);
+
+            if(operation === 'remove'){
+                removeUuidList.push(uuid);
+
+                str += "<STRIKE>"+filename+"</STRIKE>\n"+
+                    "<button class=\"btn btn-danger\" data-oper=\"cancle\" data-uuid='"+ uuid +"' data-filename='"+ filename +"'>삭제 취소</button>\n";
+            }
+            else{
+                var index = removeUuidList.indexOf(uuid);
+                console.log(index);
+                if(index > -1){
+                    removeUuidList.splice(index,1);
+                    console.log("splice");
+                }
+
+                str += filename+"\n"+
+                    "<button class=\"btn btn-danger\" data-oper=\"remove\" data-uuid='"+ uuid +"' data-filename='"+ filename +"'>파일 삭제</button>\n";
+            }
+            liObj.html(str);
+        });
+
+
+        $('#modifyButtons').on("click","button", function (e) {
             e.preventDefault();
 
             var operation = $(this).data("oper");
 
-            console.log(operation);
+            console.log(operation + "aaa");
 
             if (operation === 'remove') {
                 formObj.attr("action", "/board/remove");
@@ -99,21 +135,29 @@
             } else if (operation === 'modify') {
                 console.log("submit clicked");
 
-                /*var str = "";
-                $(".uploadResult ul li").each(function (i, obj) {
-                    var jobj = $(obj);
-                    console.dir(jobj);
+                console.log(removeUuidList);
 
-                    str += "<input type='hidden' name='attachList[" + i + "].fileName' value = '" + jobj.data("filename") + "'>";
-                    str += "<input type='hidden' name='attachList[" + i + "].uuid' value = '" + jobj.data("uuid") + "'>";
-                    str += "<input type='hidden' name='attachList[" + i + "].uploadPath' value = '" + jobj.data("path") + "'>";
-                    str += "<input type='hidden' name='attachList[" + i + "].fileType' value = '" + jobj.data("type") + "'>";
+                var str = "";
 
+            /*    removeUuidList.forEach(function (value,index) {
+                    console.log(value);
+                    console.log(index);
+                    str += "<input type='hidden' name='removeUuidList[" + index + "]' value = '" + value + "'>";
+                });*/
+
+                removeUuidList.forEach(function (value, index) {
+                    console.log(value);
+                    console.log(index);
+                    str += "<input type='hidden' name='removeUuidList[" + index + "]' value = '" + value + "'>";
                 });
-                formObj.append(str).submit();*/
+
+                formObj.append(str);
             }
             formObj.submit();
         });
+
+
+
     });
 
 </script>

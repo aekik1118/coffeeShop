@@ -83,11 +83,15 @@ public class BoardServiceImpl implements BoardService {
 			});
 		}*/
 
-	    addAttachVOList.forEach(boardAttachVO -> {
-	        boardAttachVO.setBno(board.getBno());
-	        attachMapper.insert(boardAttachVO);
-        });
-		
+	    log.info(addAttachVOList);
+
+	    if(addAttachVOList != null){
+            addAttachVOList.forEach(boardAttachVO -> {
+                boardAttachVO.setBno(board.getBno());
+                attachMapper.insert(boardAttachVO);
+            });
+        }
+
 		boolean modifyResult = mapper.update(board) == 1;
 		return modifyResult;
 	}
@@ -120,6 +124,17 @@ public class BoardServiceImpl implements BoardService {
 		return attachMapper.findByBno(bno);
 	}
 
+	@Override
+	public boolean removeFiles(List<BoardAttachVO> removeAttachList) {
+
+		removeAttachList.forEach(boardAttachVO -> {
+			attachMapper.delete(boardAttachVO.getUuid());
+		});
+		deleteFiles(removeAttachList);
+
+		return false;
+	}
+
 	private void deleteFiles(List<BoardAttachVO> attachList) {
 
 		if(attachList == null || attachList.size() == 0) {
@@ -136,5 +151,12 @@ public class BoardServiceImpl implements BoardService {
 				log.error("delete file error"+ e.getMessage());
 			}
 		});
+	}
+
+
+	@Override
+	public BoardAttachVO getAttach(String uuid) {
+		log.info("get Attach.." + uuid);
+		return attachMapper.select(uuid);
 	}
 }

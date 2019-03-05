@@ -22,4 +22,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         DELETE tbl_board_attach WHERE bno = #{bno}
     </delete>
 
+	<select id="select" resultType="com.coffeeshop.domain.BoardAttachVO">
+		SELECT * FROM tbl_board_attach WHERE uuid = #{uuid}
+	</select>
+
 </mapper>

@@ -17,6 +17,7 @@ import com.coffeeshop.domain.BoardVO;
 import com.coffeeshop.domain.Criteria;
 import com.coffeeshop.domain.PageDTO;
 import com.coffeeshop.service.BoardService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -37,8 +38,9 @@ import lombok.extern.log4j.Log4j;
 @Controller
 @Log4j
 @RequestMapping("/board/")
-@AllArgsConstructor
 public class BoardController {
+
+    @Autowired
 	private BoardService service;
 
 	@GetMapping("/list")
@@ -85,7 +87,23 @@ public class BoardController {
 	public String modify(BoardVO board, @ModelAttribute("cri") Criteria cri, RedirectAttributes rttr, MultipartFile[] uploadFile) {
 		log.info("modify: " + board);
 
-        List<BoardAttachVO> addAttachVOList = getBoardAttachListByMultipartFiles(uploadFile);
+		log.info(uploadFile[0].isEmpty());
+
+        List<BoardAttachVO> addAttachVOList = null;
+        List<BoardAttachVO> removeAttachVOList = new ArrayList<>();
+
+        if(board.getRemoveUuidList() != null && !board.getRemoveUuidList().isEmpty()){
+            board.getRemoveUuidList().forEach(s -> {
+                BoardAttachVO attachVO = service.getAttach(s);
+                log.info(attachVO);
+                removeAttachVOList.add(attachVO);
+            });
+            service.removeFiles(removeAttachVOList);
+        }
+
+		if(!uploadFile[0].isEmpty()){
+            addAttachVOList = getBoardAttachListByMultipartFiles(uploadFile);
+        }
 
 		if (service.modify(board, addAttachVOList)) {
 			rttr.addFlashAttribute("result", "success");
