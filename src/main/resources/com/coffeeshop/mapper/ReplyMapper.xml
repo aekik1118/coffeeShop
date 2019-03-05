@@ -34,11 +34,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<select id="getListWithPaging" resultType="com.coffeeshop.domain.ReplyVO">
 		<![CDATA[
-			SELECT rno, bno, reply, replyer, replydate, updatedate, rereplycount
+			SELECT rno, bno, reply, replyer, replydate, updatedate
 			FROM
 			(
 				SELECT /*+ INDEX(tbl_reply idx_reply) */
-					rownum rn, rno, bno, reply, replyer, replyDate, updatedate, rereplycount
+					rownum rn, rno, bno, reply, replyer, replyDate, updatedate
 				FROM
 					tbl_reply
 				WHERE

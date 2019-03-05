@@ -238,18 +238,16 @@
                                 "                                <div class='row align-items-start'>\n" +
                                 "                                    <div class='col-auto'>\n" +
                                 "                                        <div class= 'h5 mb-0 text-gray-800 btn' id='rereplyregbtn' data-rno='"+list[i].rno+"' data-replyer='"+list[i].replyer+"'> 답글  </div>\n" +
-                                "                                    </div>\n";
-                                 if(list[i].reReplyCount > 0){
-                                     str += "                                    <div class='col-auto'>\n" +
-                                     "                                        <div class= 'h5 mb-0 text-gray-800 btn' id='rereplylistbtn' data-rno='"+list[i].rno+"' data-replyer='"+list[i].replyer+"' data-rereplycount = '"+list[i].reReplyCount+"'> 답글 "+list[i].reReplyCount+"개 보기  </div>\n" +
-                                     "                                    </div>\n";
-                                 }
-                                str += "                                </div>" +
+                                "                                    </div>\n" +
+                                "                                    <div class='col-auto'>\n" +
+                                "                                        <div class= 'h5 mb-0 text-gray-800 btn' id='rereplylistbtn' data-rno='"+list[i].rno+"' data-replyer='"+list[i].replyer+"'> 답글보기  </div>\n" +
+                                "                                    </div>\n" +
+                                "                                </div>" +
                                 "                            </ul>" +
                                 "                            </div>\n" +
                                 "                        </div>\n" +
                                 "                    </div>\n" +
-                                "                </li>";
+                                "                </li>"
                         }
 
                         replyBody.html(str);
@@ -413,7 +411,6 @@
         replyBody.on("click","#rereplylistbtn", function (e) {
             var rno = $(this).data("rno");
             var replyer = $(this).data("replyer");
-            var reReplyCount = $(this).data("rereplycount");
             var rerepliesBody = $(this).closest("ul");
             var str = "";
 
@@ -455,7 +452,7 @@
                     "        <div class= 'h5 mb-0 text-gray-800 btn' id='rereplyregbtn' data-rno='"+rno+"' data-replyer='"+replyer+"'> 답글  </div>\n" +
                     "    </div>\n" +
                     "    <div class='col-auto'>\n" +
-                    "        <div class= 'h5 mb-0 text-gray-800 btn' id='rereplylistHidebtn' data-rno='"+rno+"' data-replyer='"+replyer+"' data-rereplycount = '"+reReplyCount+"'> 답글 숨기기 </div>\n" +
+                    "        <div class= 'h5 mb-0 text-gray-800 btn' id='rereplylistHidebtn' data-rno='"+rno+"' data-replyer='"+replyer+"'> 답글 숨기기 </div>\n" +
                     "    </div>\n" +
                     "</div>\n";
                 rerepliesBody.html(str);
@@ -465,9 +462,8 @@
         replyBody.on("click","#rereplylistHidebtn", function (e) {
             console.log("listHide");
             var rno = $(this).data("rno");
-            var replyer = $(this).data("replyer");
+            var replyer = $(this).data("replyer")
             var rerepliesBody = $(this).closest("ul");
-            var reReplyCount = $(this).data("rereplycount");
             var str = "";
 
             str +=  "<div class='row align-items-start'>\n" +
@@ -475,7 +471,7 @@
                 "        <div class= 'h5 mb-0 text-gray-800 btn' id='rereplyregbtn' data-rno='"+rno+"' data-replyer='"+replyer+"'> 답글  </div>\n" +
                 "    </div>\n" +
                 "    <div class='col-auto'>\n" +
-                "        <div class= 'h5 mb-0 text-gray-800 btn' id='rereplylistbtn' data-rno='"+rno+"' data-replyer='"+replyer+"' data-rereplycount = '"+reReplyCount+"'> 답글 "+reReplyCount+"개 보기</div>\n" +
+                "        <div class= 'h5 mb-0 text-gray-800 btn' id='rereplylistbtn' data-rno='"+rno+"' data-replyer='"+replyer+"'> 답글 보기</div>\n" +
                 "    </div>\n" +
                 "</div>\n";
             rerepliesBody.html(str);
