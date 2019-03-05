@@ -9,6 +9,6 @@ import java.util.List;
 public interface StatisticsService {
 
     public List<OrderVO> getComplete();
-    public List<StatisticsDTO> getStatisticsList(String startDate);
+    public List<StatisticsDTO> getStatisticsList(String startDate, int term);
     public int getSingleProductCnt(String prduct, String xDate);
 }

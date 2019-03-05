@@ -23,8 +23,34 @@
     <div class="row">
 
         <form aciton="chart" method="post">
-            <input type = "text" name="startDate" >
+            날짜입력 : <input type="text" class="datepicker" name="startDate" />
+
+            <select name="term">
+                <option value="7">7-days</option>
+                <option value="15">15-days</option>
+                <option value="30">30-days</option>
+            </select>
+            <input type="submit" value="submit">
         </form>
+        <link rel="stylesheet" href="http://code.jquery.com/ui/1.8.18/themes/base/jquery-ui.css" type="text/css" />
+        <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+        <script src="http://code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
+        <script>
+            $(function(){
+
+                $(".datepicker").datepicker({
+                    dateFormat : "yy-mm-dd",
+                    dayNames: ['월요일', '화요일', '수요일', '목요일', '금요일', '토요일', '일요일'],
+                    dayNamesMin: ['월', '화', '수', '목', '금', '토', '일'],
+                    monthNamesShort: ['1','2','3','4','5','6','7','8','9','10','11','12'],
+                    monthNames: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월']
+                });
+            });
+        </script>
+        <div>
+        </div>
+        <div>
+        </div>
        <script>
 
             window.onload = function () {
@@ -76,7 +102,7 @@
                         name: "Sales",
                         legendText: "{name}",
                         dataPoints: [
-                            <c:forEach items="${list}" var="statistics" varStatus="state">
+                           <c:forEach items="${list}" var="statistics" varStatus="state">
                             { x: new Date(<c:out value="${statistics.startDate}" />),
                                 y: <c:out value="${statistics.totalSales}" /> }
                             <c:if test="${state.last eq false}">,</c:if>
@@ -119,7 +145,7 @@
                         type: "column",
                         yValueFormatString: "#,##0\"",
                         dataPoints:[
-                            <c:forEach items="${list}" var="statistics" varStatus="state">
+                           <c:forEach items="${list}" var="statistics" varStatus="state">
                             { label: <c:out value="${statistics.startDate}" />,
                                 y: <c:out value="${statistics.totalSales}" /> }
                             <c:if test="${state.last eq false}">,</c:if>
@@ -135,7 +161,6 @@
         <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
 
     </div>
-
 
 
 

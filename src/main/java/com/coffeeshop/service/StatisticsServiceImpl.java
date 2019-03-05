@@ -32,7 +32,7 @@ public class StatisticsServiceImpl implements StatisticsService {
     }
 
     @Override
-    public List<StatisticsDTO> getStatisticsList(String startDate) {
+    public List<StatisticsDTO> getStatisticsList(String startDate, int term) {
 
         List<StatisticsDTO> statisticsList = new ArrayList<>();
 
@@ -43,14 +43,13 @@ public class StatisticsServiceImpl implements StatisticsService {
 
             Calendar cal = Calendar.getInstance();
             cal.setTime(xDate);
-            for(int i = 0; i < 15; i++ ) {
-                cal.add(Calendar.DATE, 1);
+            for(int i = 0; i < term; i++ ) {
                 StatisticsDTO statisticsDTO = new StatisticsDTO();
                 statisticsDTO.setOrderCnt(mapper.getOnoCount(cal.getTime()));
-//                statisticsDTO.setProductCnt(orderedPMapper.allProductCount(cal.getTime()));
                 statisticsDTO.setTotalSales(mapper.getTotalSales(cal.getTime()));
                 statisticsDTO.setStartDate(cal.getTime());
                 statisticsList.add(statisticsDTO);
+                cal.add(Calendar.DATE, 1);
             }
 
         }catch (Exception e){

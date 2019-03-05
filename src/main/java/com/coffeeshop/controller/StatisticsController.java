@@ -24,11 +24,11 @@ public class StatisticsController {
     }
 
     @PostMapping("/chart")
-    public void chart(@RequestParam("startDate") String startDate, Model model){
+    public void chart(@RequestParam("startDate") String startDate, @RequestParam("term") int term, Model model){
 
         log.info("chart(post)..........");
         model.addAttribute("startDate",startDate);
-        model.addAttribute("list", service.getStatisticsList(startDate));
+        model.addAttribute("list", service.getStatisticsList(startDate, term));
         log.info(startDate);
         log.info(model.toString());
     }

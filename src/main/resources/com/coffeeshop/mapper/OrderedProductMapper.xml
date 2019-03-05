@@ -31,7 +31,7 @@
 
     <select id="singleProductCount" resultType="int">
         <![CDATA[
-        SELECT count(opno) FROM tbl_orderedProduct
+        SELECT count(opno)*count(count) FROM tbl_orderedProduct
         WHERE product = #{product}
         and TO_CHAR(opdate,'yyyy-mm-dd') = TO_CHAR(#{xDate},'yyyy-mm-dd')
         ]]>
