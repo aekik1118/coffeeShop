@@ -18,7 +18,7 @@
             </div>
             <div class="card-body">
 
-                <form role="form" action="/board/register" method="post">
+                <form role="form" action="/board/register" method="post" enctype="multipart/form-data">
                     <div class="form-group">
                         <label>글제목</label>
                         <input type="text" class="form-control" name="title">
@@ -32,6 +32,11 @@
                     <div class="form-group">
                         <label>작성자</label>
                         <input type="text" class="form-control" name="writer">
+                    </div>
+
+                    <div class="form-group">
+                        <label>첨부파일</label>
+                        <input type="file" class="form-control" name="uploadFile" multiple>
                     </div>
 
                     <button class="btn btn-primary btn-block">작성 완료</button>
