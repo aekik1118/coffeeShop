@@ -59,6 +59,9 @@ public class ProductMapperTests {
         String str = "test case";
         if(mapper.remove(str) == 1) log.info(str + " remove success");
         else log.info(str + " remove fail");
+
+        log.info("===== getTotal test =====");
+        log.info(mapper.getTotal());
     }
 
 }

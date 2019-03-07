@@ -3,18 +3,23 @@ package com.coffeeshop.controller;
 import com.coffeeshop.domain.ProductAttachDTO;
 import lombok.extern.log4j.Log4j;
 import net.coobird.thumbnailator.Thumbnailator;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.FileCopyUtils;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -96,5 +101,28 @@ public class ProductUploadController {
         }
 
         return new ResponseEntity<String>("delete", HttpStatus.OK);
+    }
+
+    @GetMapping("/productDisplay")
+    @ResponseBody
+    public ResponseEntity<byte[]> getFile(String fileName) {
+        log.info("fileName : " + fileName);
+
+        File file = new File(fileName);
+        log.info(file);
+
+        ResponseEntity<byte[]> result = null;
+
+        try{
+            HttpHeaders header = new HttpHeaders();
+
+            header.add("Content-Type", Files.probeContentType(file.toPath()));
+            result = new ResponseEntity<>(FileCopyUtils.copyToByteArray(file), header, HttpStatus.OK);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        log.info(result);
+        return result;
     }
 }

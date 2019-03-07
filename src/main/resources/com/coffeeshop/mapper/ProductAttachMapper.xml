@@ -13,7 +13,11 @@
         DELETE FROM tbl_productAttach WHERE productid = #{productid}
     </delete>
 
+    <update id="update">
+        UPDATE tbl_productAttach SET uuid = #{uuid}, uploadPath = #{uploadPath}, fileName = #{fileName} WHERE productid = #{productid}
+    </update>
+
     <select id="getAttach" resultType="com.coffeeshop.domain.ProductAttachVO">
-        SELECT * FROM tbl_productAttach WHERE uuid = #{uuid}
+        SELECT * FROM tbl_productAttach WHERE productid = #{productid}
     </select>
 </mapper>

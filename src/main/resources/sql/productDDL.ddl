@@ -7,3 +7,4 @@ create table tbl_product (
 
 alter table tbl_product add hot char(1) default '0';
 alter table tbl_product rename COLUMN ice_possible to ice;
+alter table tbl_product add imgPath varchar2(200) default 'null';

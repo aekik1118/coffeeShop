@@ -2,6 +2,7 @@ package com.coffeeshop.controller;
 
 import com.coffeeshop.domain.Criteria;
 import com.coffeeshop.domain.PageDTO;
+import com.coffeeshop.domain.ProductAttachVO;
 import com.coffeeshop.domain.ProductVO;
 import com.coffeeshop.service.ProductService;
 import lombok.AllArgsConstructor;
@@ -37,6 +38,13 @@ public class ProductController {
 
     @PostMapping(value = "/register", consumes = "application/json", produces = {MediaType.TEXT_PLAIN_VALUE})
     public ResponseEntity<String> register(@RequestBody ProductVO product) {
+        log.info(product.getImgPath());
+        /*if(product.getImgPath() != "") {
+            try { product.setImgPath(URLDecoder.decode(product.getImgPath(), "UTF-8")); } catch (Exception e) { e.printStackTrace(); }
+            log.info(product.getImgPath());
+        }*/
+
+
         log.info("=========================");
         log.info("register : " + product);
         log.info("=========================");
@@ -51,21 +59,29 @@ public class ProductController {
 
     @GetMapping(value = "/{productid}", produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_UTF8_VALUE})
     public ResponseEntity<ProductVO> get(@PathVariable("productid") String productid) {
-        log.info("get : " + productid);
+        log.info("get : " + productid + "" + service.get(productid));
         return new ResponseEntity<>(service.get(productid), HttpStatus.OK);
     }
 
-    @PutMapping(value="/{productid}", consumes = "application/json", produces = {MediaType.TEXT_PLAIN_VALUE})
+    @PutMapping(value = "/{productid}", consumes = "application/json", produces = {MediaType.TEXT_PLAIN_VALUE})
     public ResponseEntity<String> modify(@RequestBody ProductVO product, @PathVariable("productid") String productid) {
 
         log.info(productid + " modify : " + product);
+        if(product.getAttach() != null) log.info("modify attach : " + product.getAttach());
         return service.modify(product) == 1 ? new ResponseEntity<>("success", HttpStatus.OK) : new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @DeleteMapping(value="/{productid}", produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_UTF8_VALUE })
+    @DeleteMapping(value = "/{productid}", produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_UTF8_VALUE })
     public ResponseEntity<String> remove(@PathVariable("productid") String productid) {
 
         log.info("remove : " + productid);
         return service.remove(productid) == 1 ? new ResponseEntity<>("success", HttpStatus.OK) : new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @GetMapping(value = "/getAttach", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<ProductAttachVO> getAttach(String productid) {
+        log.info("getAttach : " + productid);
+
+        return new ResponseEntity<>(service.getAttach(productid), HttpStatus.OK);
     }
 }

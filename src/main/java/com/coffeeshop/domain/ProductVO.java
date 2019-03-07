@@ -10,6 +10,7 @@ public class ProductVO {
     private Boolean ice;
     private Boolean hot;
     private String explain;
+    private String imgPath;
 
     private  ProductAttachVO attach;
 }

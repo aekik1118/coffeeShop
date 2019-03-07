@@ -1,6 +1,7 @@
 package com.coffeeshop.service;
 
 import com.coffeeshop.domain.Criteria;
+import com.coffeeshop.domain.ProductAttachVO;
 import com.coffeeshop.domain.ProductVO;
 import com.coffeeshop.mapper.ProductAttachMapper;
 import com.coffeeshop.mapper.ProductMapper;
@@ -22,7 +23,7 @@ public class ProductServiceImpl implements ProductService {
     @Setter(onMethod_ = {@Autowired})
     private ProductAttachMapper attachMapper;
 
-    //@Transactional
+    @Transactional
     @Override
     public int register(ProductVO product) {
         log.info("regist product : " + product);
@@ -35,14 +36,32 @@ public class ProductServiceImpl implements ProductService {
         return regResult;
     }
 
+    @Transactional
     @Override
     public int modify(ProductVO product) {
         log.info(product.getProductId() + " modify to : " + product);
-        return mapper.modify(product);
+        if(attachMapper.getAttach(product.getProductId()) != null  && product.getImgPath() == "") {
+            product.setAttach(null);
+            attachMapper.delete(product.getProductId());
+        }
+
+        int modResult = mapper.modify(product);
+
+        if(product.getAttach() != null){
+            log.info("update product attach : " + product.getAttach());
+            if(attachMapper.getAttach(product.getProductId()) == null) attachMapper.insert(product.getAttach());
+            else attachMapper.update(product.getAttach());
+        }
+
+        return modResult;
     }
 
+    @Transactional
     @Override
     public int remove(String productid) {
+        attachMapper.delete(productid);
+        log.info(productid + " attach remove");
+
         log.info(productid + " remove");
         return mapper.remove(productid);
     }
@@ -65,5 +84,11 @@ public class ProductServiceImpl implements ProductService {
     public ProductVO get(String productid) {
         log.info("get : " + productid);
         return mapper.get(productid);
+    }
+
+    @Override
+    public ProductAttachVO getAttach(String productid) {
+        log.info("service getAttach : " + productid);
+        return attachMapper.getAttach(productid);
     }
 }
