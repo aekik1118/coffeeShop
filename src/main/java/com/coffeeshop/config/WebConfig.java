@@ -8,6 +8,7 @@ import javax.servlet.MultipartConfigElement;
 import javax.servlet.ServletRegistration;
 import javax.servlet.annotation.MultipartConfig;
 
+
 public class WebConfig extends AbstractAnnotationConfigDispatcherServletInitializer {
     @Override
     protected Class<?>[] getRootConfigClasses() { return new Class[]{RootConfig.class}; }
@@ -34,9 +35,9 @@ public class WebConfig extends AbstractAnnotationConfigDispatcherServletInitiali
 
     @Override
     protected void customizeRegistration(ServletRegistration.Dynamic registration) {
-
         registration.setInitParameter("throwExceptionIfNoHandlerFound","true");
         MultipartConfigElement multipartConfigElement = new MultipartConfigElement("C:\\upload\\temp",1024*1024*20,1024*1024*40,1024*1024*20);
         registration.setMultipartConfig(multipartConfigElement);
+
     }
 }

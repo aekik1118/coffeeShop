@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.coffeeshop.mapper.ProductMapper">
+    <insert id="register">
+        INSERT INTO tbl_product (productid, price, ice, hot, explain, imgPath)
+        VALUES (#{productId}, #{price}, #{ice}, #{hot}, #{explain}, #{imgPath})
+    </insert>
+
+    <delete id="remove">
+        DELETE  tbl_product WHERE productid = #{productId}
+    </delete>
+
+    <update id="modify">
+        UPDATE tbl_product set price = #{price}, ice = #{ice}, hot = #{hot}, explain = #{explain}, imgPath = #{imgPath} WHERE productid = #{productId}
+    </update>
+
+    <select id="getList" resultType="com.coffeeshop.domain.ProductVO">
+        <![CDATA[
+			SELECT *
+			FROM
+			(
+				SELECT /*+ INDEX(tbl_product idx_product) */
+					rownum rn, productid, price, ice, hot, explain, imgPath
+				FROM
+					tbl_product
+				WHERE
+				    rownum <= #{pageNum} * #{amount}
+			)
+			WHERE rn > (#{pageNum} - 1) * #{amount}
+		]]>
+    </select>
+
+    <select id="getTotal" resultType="int">
+        SELECT COUNT(*) FROM tbl_product
+    </select>
+
+    <select id="get" resultType="com.coffeeshop.domain.ProductVO">
+        SELECT * FROM tbl_product WHERE productid = #{productid}
+    </select>
+</mapper>

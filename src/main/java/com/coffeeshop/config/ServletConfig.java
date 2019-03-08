@@ -36,4 +36,5 @@ public class ServletConfig extends WebMvcConfigurationSupport {
         StandardServletMultipartResolver resolver = new StandardServletMultipartResolver();
         return resolver;
     }
+
 }
