@@ -36,18 +36,22 @@
                                         <div id="productImg" class="text-center">
                                             <c:choose>
                                                 <c:when test="${product.imgPath eq null}">
-                                                    <img class="img-fluid px-3 px-sm-4 mt-3 mb-4" style="width: 25rem;" src="/resources/img/undraw_posting_photo.svg" alt="">
+                                                    <img class="img-fluid px-3 px-sm-4 mt-3 mb-4" style="width: 25rem; height: 10rem;" src="/resources/img/undraw_posting_photo.svg" alt="">
                                                 </c:when>
 
                                                 <c:otherwise>
-                                                    <img class="img-fluid px-3 px-sm-4 mt-3 mb-4" style="width: 25rem;" src="/productDisplay?fileName=${product.imgPath}" alt="">
+                                                    <img class="img-fluid px-3 px-sm-4 mt-3 mb-4" style="width: 25rem; height: 10rem" src="/productDisplay?fileName=${product.imgPath}" alt="">
                                                 </c:otherwise>
                                             </c:choose>
 
                                         </div>
-                                        <c:out value="${product.explain}"/>
+
+                                        <div style="width: 20rem; height: 24px; overflow: hidden; text-overflow: ellipsis;">
+                                            <c:out value="${product.explain}"/>
+                                        </div>
+
                                         <div>
-                                            Price : <c:out value="${product.price}" />
+                                           Price : <c:out value="${product.price}" />
                                             <c:if test="${product.ice eq true}"> ICE </c:if>
                                             <c:if test="${product.hot eq true}"> HOT </c:if>
                                         </div>
@@ -65,7 +69,7 @@
 
         <!-- start pagination -->
         <div class="col-sm-12 col-md-7">
-            <div class="col mr-2" align="center">
+            <div class="col mr-2">
                 <ul class="pagination">
                     <c:if test="${pageMaker.prev }">
                         <li class="page-item previous paginate_button"><a class="page-link" href="${pageMaker.startPage -1 }">Previous</a></li>
@@ -104,8 +108,10 @@
                 <h4 class="modal-title" id="myModalLabel">Register</h4>
             </div>
 
-            <div class="form-group">
-                <input type="text" class="orm-control form-control-user" name="productid" placeholder="Product Name">
+            <div class="form-group row">
+                <div class="col-sm-6 mb-3 mb-sm-0">
+                    <input type="text" class="form-control form-control-user" name="productid" placeholder="Product Name">
+                </div>
             </div>
 
             <div class="form-group row">
@@ -119,9 +125,7 @@
             </div>
 
             <div class="form-group">
-                <div class="col-sm-6 mb-3 mb-sm-0">
                     <input type="text" class="form-control form-control-user" name="explain" placeholder="Product explain">
-                </div>
             </div>
 
             <div id="uploadDiv" class="form-group">
@@ -371,6 +375,7 @@
                 if(originalPath == null) {
                     var fileReg = "<input type='file' name='uploadFile' multiple>";
                     $("#uploadDiv").html(fileReg);
+                    originalPath = "";
                 }
 
             });
