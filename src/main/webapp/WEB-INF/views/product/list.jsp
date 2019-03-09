@@ -158,6 +158,24 @@
         var modalInputHot = myModal.find("input[name='hot']");
         var modalInputExplain = myModal.find("input[name='explain']");
 
+        var regex = new RegExp("(.*?)\.(jpg|png|gif|bmp)$");
+        var maxSize = 5242880; //5MB
+
+        function checkExtension(fileName, fileSize) {
+
+            if(fileSize >= maxSize) {
+                alert("파일 사이즈 초과!");
+                return false;
+            }
+
+            if(!regex.test(fileName)) {
+                alert("해당 종류의 파일은 업로드 할 수 없습니다.");
+                return false;
+            }
+
+            return true;
+        } // end checkExtension
+
         $("#ice").on("change", function(){
             if($(this).is(':checked')) $(this).attr('value', 'true');
             else $(this).attr('value', 'false');
@@ -190,24 +208,6 @@
             $("#myModal").modal("show");
 
 
-            var regex = new RegExp("(.*?)\.(exe|sh|zip|alz)$");
-            var maxSize = 5242880; //5MB
-
-            function checkExtension(fileName, fileSize) {
-
-                if(fileSize >= maxSize) {
-                    alert("파일 사이즈 초과!");
-                    return false;
-                }
-
-                if(regex.test(fileName)) {
-                    alert("해당 종류의 파일은 업로드 할 수 없습니다.");
-                    return false;
-                }
-
-                return true;
-            } // end checkExtension
-
             var uuid = null;
             var fileName = null;
             var uploadPath = null;
@@ -216,6 +216,11 @@
                 var formData = new FormData();
                 var inputFile = $("input[name='uploadFile']");
                 var files = inputFile[0].files;
+
+                if(files.length > 1) {
+                    alert("1개의 이미지만 선택하세요.");
+                    return false;
+                }
 
                 for(var i = 0; i < files.length; i++) {
 
@@ -406,29 +411,16 @@
 
             myModal.modal("show");
 
-            var regex = new RegExp("(.*?)\.(exe|sh|zip|alz)$");
-            var maxSize = 5242880; //5MB
-
-            function checkExtension(fileName, fileSize) {
-
-                if(fileSize >= maxSize) {
-                    alert("파일 사이즈 초과!");
-                    return false;
-                }
-
-                if(regex.test(fileName)) {
-                    alert("해당 종류의 파일은 업로드 할 수 없습니다.");
-                    return false;
-                }
-
-                return true;
-            } // end checkExtension
-
             $("#uploadDiv").on("change", "input", function () {
                 console.log("uploadDiv input change!!");
                 var formData = new FormData();
                 var inputFile = $("input[name='uploadFile']");
                 var files = inputFile[0].files;
+
+                if(files.length > 1) {
+                    alert("1개의 파일만 선택하세요.");
+                    return false;
+                }
 
                 for(var i = 0; i < files.length; i++) {
 
